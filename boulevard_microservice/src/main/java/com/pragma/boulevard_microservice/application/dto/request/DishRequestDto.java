@@ -1,0 +1,26 @@
+package com.pragma.boulevard_microservice.application.dto.request;
+
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.CategoryEntity;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.RestaurantEntity;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class DishRequestDto {
+
+    private String name;
+
+    private CategoryEntity categoryEntity;
+
+    private String description;
+
+    private String price;
+
+    private RestaurantEntity restaurantEntity;
+
+    private String urlImage;
+
+    private boolean active;
+
+}

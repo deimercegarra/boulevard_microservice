@@ -4,6 +4,6 @@ import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
 
 public interface IUserPersistencePort {
 
-    public CommonResponseModel findOwner(Long userId);
+    public CommonResponseModel findRole(Long userId);
 
 }

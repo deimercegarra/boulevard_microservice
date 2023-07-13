@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/boulevard_microservice.iml" filepath="$PROJECT_DIR$/.idea/boulevard_microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.iml" filepath="$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.pragma.boulevard_microservice.test.iml" />
     </modules>
   </component>
 </project>

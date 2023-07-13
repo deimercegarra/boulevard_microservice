@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "${user_microservice.name}", url = "${user_microservice.url}")
 public interface UserClient {
 
-    @GetMapping("/api/v1/user/findOwner/{userId}")
-    public CommonResponseDto findOwner(@PathVariable Long userId);
+    @GetMapping("/api/v1/user/findRole/{userId}")
+    public CommonResponseDto findRole(@PathVariable Long userId);
 
 }

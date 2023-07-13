@@ -13,8 +13,8 @@ public class UserJpaAdapter implements IUserPersistencePort {
     private final ICommonResponseMapper iCommonResponseMapper;
 
     @Override
-    public CommonResponseModel findOwner(Long userId) {
-        return iCommonResponseMapper.toModel(userClient.findOwner(userId));
+    public CommonResponseModel  findRole(Long userId) {
+        return iCommonResponseMapper.toModel(userClient.findRole(userId));
     }
 
 }

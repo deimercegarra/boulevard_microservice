@@ -76,12 +76,17 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IUserServicePort iUserServicePort() {
+        return new UserUseCase(iUserPersistencePort());
+    }
+
+    @Bean
     public IUserPersistencePort iUserPersistencePort() {
         return new UserJpaAdapter(userClient, iCommonResponseMapper);
     }
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(iRestaurantPersistencePort(), iUserPersistencePort());
+        return new RestaurantUseCase(iRestaurantPersistencePort(), iUserServicePort());
     }
 
 }

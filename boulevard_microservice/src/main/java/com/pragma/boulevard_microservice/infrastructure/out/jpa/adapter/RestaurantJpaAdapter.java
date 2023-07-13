@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter;
 
+import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
 import com.pragma.boulevard_microservice.domain.model.RestaurantModel;
 import com.pragma.boulevard_microservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
@@ -33,7 +34,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     @Override
     public RestaurantModel getRestaurant(Long userId) {
         return iRestaurantEntityMapper.toModel(iRestaurantRepository.findById(userId)
-                .orElseThrow(NoDataFoundException::new));
+                .orElseThrow(RestaurantNotFoundException::new));
     }
 
     @Override

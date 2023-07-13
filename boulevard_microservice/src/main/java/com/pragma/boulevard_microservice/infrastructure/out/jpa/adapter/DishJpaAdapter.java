@@ -2,10 +2,14 @@ package com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter;
 
 import com.pragma.boulevard_microservice.domain.model.DishModel;
 import com.pragma.boulevard_microservice.domain.spi.IDishPersistencePort;
+import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.DishEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IDishEntityMapper;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.ICategoryRepository;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IDishRepository;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IRestaurantRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,10 +19,23 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
     private final IDishRepository iDishRepository;
     private final IDishEntityMapper iDishEntityMapper;
+    private final ICategoryRepository iCategoryRepository;
+    private final IRestaurantRepository iRestaurantRepository;
 
     @Override
     public void saveDish(DishModel dishModel) {
-        iDishRepository.save(iDishEntityMapper.toEntity(dishModel));
+
+        DishEntity dishEntity = iDishEntityMapper.toEntity(dishModel);
+
+        dishEntity.setCategoryEntity(iCategoryRepository.findById(dishModel.getCategoryId())
+                .orElseThrow(CategoryNotFoundException::new));
+
+        dishEntity.setRestaurantEntity(iRestaurantRepository.findById(dishModel.getRestaurantId())
+                .orElseThrow(RestaurantNotFoundException::new));
+
+        dishModel.setActive(true);
+
+        iDishRepository.save(dishEntity);
     }
 
     @Override

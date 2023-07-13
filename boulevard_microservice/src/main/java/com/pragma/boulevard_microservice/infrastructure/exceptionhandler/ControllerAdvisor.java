@@ -1,6 +1,9 @@
 package com.pragma.boulevard_microservice.infrastructure.exceptionhandler;
 
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
+import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
+import com.pragma.boulevard_microservice.domain.exception.UserNotFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +26,23 @@ public class ControllerAdvisor {
             NoDataFoundException ignoredNoDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
-                        ignoredNoDataFoundException.getMessage() != null ? ignoredNoDataFoundException.getMessage() : ExceptionResponse.NO_DATA_FOUND.getMessage()));
+                        ignoredNoDataFoundException.getMessage() != null ? ignoredNoDataFoundException.getMessage() : "No data found for the requested petition"));
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCategoryNotFoundException(
+            CategoryNotFoundException ignoredCategoryNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredCategoryNotFoundException.getMessage() != null ? ignoredCategoryNotFoundException.getMessage() : "Category not found."));
+    }
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleRestaurantNotFoundException(
+            RestaurantNotFoundException ignoredRestaurantNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredRestaurantNotFoundException.getMessage() != null ? ignoredRestaurantNotFoundException.getMessage() : "Restaurant not found."));
     }
 
     @ExceptionHandler(DomainException.class)
@@ -31,7 +50,15 @@ public class ControllerAdvisor {
             DomainException ignoredDomainException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
-                        ignoredDomainException.getMessage() != null ? ignoredDomainException.getMessage() : ExceptionResponse.NO_DATA_FOUND.getMessage()));
+                        ignoredDomainException.getMessage() != null ? ignoredDomainException.getMessage() : "No data found for the requested petition"));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotFoundException(
+            UserNotFoundException ignoredUserNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredUserNotFoundException.getMessage() != null ? ignoredUserNotFoundException.getMessage() : "User not found."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -25,9 +25,9 @@ public class RestaurantRestController {
 
     @Operation(summary = "Add a new Restaurant")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Restaurant created", content = @Content),
+            @ApiResponse(responseCode = "201", description = "Restaurant created.", content = @Content),
             @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Restaurant already exists", content = @Content)
+            @ApiResponse(responseCode = "409", description = "Restaurant already exists.", content = @Content)
     })
     @PostMapping("/")
     public ResponseEntity<CommonResponseDto> saveRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequestDto) {

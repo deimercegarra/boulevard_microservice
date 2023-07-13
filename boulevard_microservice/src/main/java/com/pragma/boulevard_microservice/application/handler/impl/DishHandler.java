@@ -1,8 +1,10 @@
 package com.pragma.boulevard_microservice.application.handler.impl;
 
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
+import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
 import com.pragma.boulevard_microservice.application.handler.IDishHandler;
+import com.pragma.boulevard_microservice.application.mapper.ICommonResponseMapper;
 import com.pragma.boulevard_microservice.application.mapper.IDishRequestMapper;
 import com.pragma.boulevard_microservice.application.mapper.IDishResponseMapper;
 import com.pragma.boulevard_microservice.domain.api.IDishServicePort;
@@ -20,10 +22,11 @@ public class DishHandler implements IDishHandler {
     private final IDishServicePort iDishServicePort;
     private final IDishRequestMapper iDishRequestMapper;
     private final IDishResponseMapper iDishResponseMapper;
+    private final ICommonResponseMapper iCommonResponseMapper;
 
     @Override
-    public void saveDish(DishRequestDto dishRequestDto) {
-        iDishServicePort.saveDish(iDishRequestMapper.toDishModel(dishRequestDto));
+    public CommonResponseDto saveDish(DishRequestDto dishRequestDto) {
+        return iCommonResponseMapper.toResponse(iDishServicePort.saveDish(iDishRequestMapper.toDishModel(dishRequestDto)));
     }
 
     @Override

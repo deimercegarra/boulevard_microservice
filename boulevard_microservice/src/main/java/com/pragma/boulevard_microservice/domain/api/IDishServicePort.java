@@ -1,12 +1,13 @@
 package com.pragma.boulevard_microservice.domain.api;
 
+import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
 import com.pragma.boulevard_microservice.domain.model.DishModel;
 
 import java.util.List;
 
 public interface IDishServicePort {
 
-    void saveDish(DishModel dishModel);
+    CommonResponseModel saveDish(DishModel dishModel);
 
     List<DishModel> getAllDishes();
 

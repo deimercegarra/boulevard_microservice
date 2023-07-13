@@ -45,11 +45,11 @@ public class BeanConfiguration {
 
     @Bean
     public IDishPersistencePort iDishPersistencePort() {
-        return new DishJpaAdapter(iDishRepository, iDishEntityMapper);
+        return new DishJpaAdapter(iDishRepository, iDishEntityMapper, iCategoryRepository, iRestaurantRepository);
     }
     @Bean
     public IDishServicePort dishServicePort() {
-        return new DishUseCase(iDishPersistencePort());
+        return new DishUseCase(iDishPersistencePort(), iRestaurantPersistencePort(), iUserPersistencePort());
     }
 
     @Bean

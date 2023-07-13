@@ -32,8 +32,8 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     }
 
     @Override
-    public RestaurantModel getRestaurant(Long userId) {
-        return iRestaurantEntityMapper.toModel(iRestaurantRepository.findById(userId)
+    public RestaurantModel getRestaurant(Long id) {
+        return iRestaurantEntityMapper.toModel(iRestaurantRepository.findById(id)
                 .orElseThrow(RestaurantNotFoundException::new));
     }
 
@@ -43,8 +43,8 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     }
 
     @Override
-    public void deleteRestaurant(Long userId) {
-        iRestaurantRepository.deleteById(userId);
+    public void deleteRestaurant(Long id) {
+        iRestaurantRepository.deleteById(id);
     }
 
 }

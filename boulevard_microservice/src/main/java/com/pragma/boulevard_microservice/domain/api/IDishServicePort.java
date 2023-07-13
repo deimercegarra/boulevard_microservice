@@ -13,7 +13,7 @@ public interface IDishServicePort {
 
     DishModel getDish(Long dishId);
 
-    void updateDish(DishModel dishModel);
+    CommonResponseModel updateDish(DishModel dishModel);
 
     void deleteDish(Long dishId);
 

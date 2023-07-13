@@ -18,6 +18,7 @@ import lombok.Setter;
 @Setter
 public class DishModel {
 
+    private Long id;
     private String name;
     private Long categoryId;
     private String description;

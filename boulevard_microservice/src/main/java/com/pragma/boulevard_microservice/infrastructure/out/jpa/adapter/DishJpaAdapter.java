@@ -1,11 +1,15 @@
 package com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter;
 
+import com.pragma.boulevard_microservice.domain.exception.DomainException;
 import com.pragma.boulevard_microservice.domain.model.DishModel;
+import com.pragma.boulevard_microservice.domain.model.RestaurantModel;
 import com.pragma.boulevard_microservice.domain.spi.IDishPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.UnauthorizedUserException;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.DishEntity;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.ICategoryRepository;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IDishRepository;
@@ -55,7 +59,17 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
     @Override
     public void updateDish(DishModel dishModel) {
-        iDishRepository.save(iDishEntityMapper.toEntity(dishModel));
+        DishEntity dishEntity = iDishRepository.getReferenceById(dishModel.getId());
+
+        RestaurantEntity restaurantEntity = iRestaurantRepository.getReferenceById(dishEntity.getRestaurantEntity().getId());
+
+        if (! (dishModel.getUserId().equals(restaurantEntity.getIdOwner())) )
+            throw new UnauthorizedUserException("Unauthorized user.");
+
+        dishEntity.setDescription(dishModel.getDescription());
+        dishEntity.setPrice(String.valueOf( dishModel.getPrice() ));
+
+        iDishRepository.save(dishEntity);
     }
 
     @Override

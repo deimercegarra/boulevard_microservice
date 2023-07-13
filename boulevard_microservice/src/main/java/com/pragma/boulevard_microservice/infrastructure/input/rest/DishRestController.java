@@ -1,6 +1,7 @@
 package com.pragma.boulevard_microservice.infrastructure.input.rest;
 
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
+import com.pragma.boulevard_microservice.application.dto.request.DishUpdateRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.handler.IDishHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,13 +12,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/Dish")
+@RequestMapping("/api/v1/dish")
 @RequiredArgsConstructor
 public class DishRestController {
 
@@ -38,6 +36,24 @@ public class DishRestController {
                     .body(commonResponseDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
+                .body(commonResponseDto);
+    }
+
+    @Operation(summary = "Update a Dish. You can only update price and description.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dish Updated.", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Dish not found.", content = @Content)
+    })
+    @PutMapping("/")
+    public ResponseEntity<CommonResponseDto> updateDish(@Valid  @RequestBody DishUpdateRequestDto dishUpdateRequestDto) {
+        CommonResponseDto commonResponseDto = iDishHandler.updateDish(dishUpdateRequestDto);
+
+        if (!commonResponseDto.getStatus())
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(commonResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(commonResponseDto);
     }
 

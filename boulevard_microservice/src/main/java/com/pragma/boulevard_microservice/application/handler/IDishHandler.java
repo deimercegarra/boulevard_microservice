@@ -1,6 +1,7 @@
 package com.pragma.boulevard_microservice.application.handler;
 
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
+import com.pragma.boulevard_microservice.application.dto.request.DishUpdateRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
 
@@ -14,7 +15,7 @@ public interface IDishHandler {
 
     public DishResponseDto getDish(Long dishId);
 
-    public void updateDish(DishRequestDto dishRequestDto);
+    public CommonResponseDto updateDish(DishUpdateRequestDto dishUpdateRequestDto);
 
     public void deleteDish(Long dishId);
 

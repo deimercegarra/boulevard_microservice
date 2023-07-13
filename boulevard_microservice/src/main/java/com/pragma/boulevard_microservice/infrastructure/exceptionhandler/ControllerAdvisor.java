@@ -5,6 +5,7 @@ import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotF
 import com.pragma.boulevard_microservice.domain.exception.UserNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.UnauthorizedUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -51,6 +52,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
                         ignoredDomainException.getMessage() != null ? ignoredDomainException.getMessage() : "No data found for the requested petition"));
+    }
+
+    @ExceptionHandler(UnauthorizedUserException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorizedUserException(
+            UnauthorizedUserException ignoredUnauthorizedUserException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredUnauthorizedUserException.getMessage() != null ? ignoredUnauthorizedUserException.getMessage() : "Unauthorized user."));
     }
 
     @ExceptionHandler(UserNotFoundException.class)

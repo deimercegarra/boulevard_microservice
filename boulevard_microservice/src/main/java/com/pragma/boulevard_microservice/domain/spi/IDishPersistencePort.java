@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface IDishPersistencePort {
 
-    void saveDish(DishModel dishModel);
+    DishModel saveDish(DishModel dishModel);
 
     List<DishModel> getAllDishes();
 
     DishModel getDish(Long dishId);
 
-    void updateDish(DishModel dishModel);
+    DishModel updateDish(DishModel dishModel);
 
     void deleteDish(Long dishId);
 

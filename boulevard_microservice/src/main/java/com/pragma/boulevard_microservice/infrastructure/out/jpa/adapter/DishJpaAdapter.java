@@ -27,7 +27,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
     private final IRestaurantRepository iRestaurantRepository;
 
     @Override
-    public void saveDish(DishModel dishModel) {
+    public DishModel saveDish(DishModel dishModel) {
 
         DishEntity dishEntity = iDishEntityMapper.toEntity(dishModel);
 
@@ -39,7 +39,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
         dishModel.setActive(true);
 
-        iDishRepository.save(dishEntity);
+        return iDishEntityMapper.toModel(iDishRepository.save(dishEntity));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public void updateDish(DishModel dishModel) {
+    public DishModel updateDish(DishModel dishModel) {
         DishEntity dishEntity = iDishRepository.getReferenceById(dishModel.getId());
 
         RestaurantEntity restaurantEntity = iRestaurantRepository.getReferenceById(dishEntity.getRestaurantEntity().getId());
@@ -69,7 +69,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
         dishEntity.setDescription(dishModel.getDescription());
         dishEntity.setPrice(String.valueOf( dishModel.getPrice() ));
 
-        iDishRepository.save(dishEntity);
+        return iDishEntityMapper.toModel(iDishRepository.save(dishEntity));
     }
 
     @Override

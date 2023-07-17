@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface IRestaurantPersistencePort {
 
-    void saveRestaurant(RestaurantModel restaurantModel);
+    RestaurantModel saveRestaurant(RestaurantModel restaurantModel);
 
     List<RestaurantModel> getAllRestaurants();
 
     RestaurantModel getRestaurant(Long restaurantId);
 
-    void updateRestaurant(RestaurantModel restaurantModel);
+    RestaurantModel updateRestaurant(RestaurantModel restaurantModel);
 
     void deleteRestaurant(Long restaurantId);
 

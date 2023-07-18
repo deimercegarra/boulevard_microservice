@@ -12,7 +12,7 @@ spring:
       ddl-auto: update
     show-sql: true
   application:
-    name: boulevard_microservice
+    name: boulevard-microservice
 
 
 user_microservice:

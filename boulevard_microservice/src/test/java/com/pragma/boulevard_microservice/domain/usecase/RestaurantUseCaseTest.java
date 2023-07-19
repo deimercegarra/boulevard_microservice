@@ -9,10 +9,17 @@ import com.pragma.boulevard_microservice.domain.model.RoleModel;
 import com.pragma.boulevard_microservice.domain.model.UserModel;
 import com.pragma.boulevard_microservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IUserPersistencePort;
+import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,6 +76,45 @@ class RestaurantUseCaseTest {
     void saveRestaurantInternalErrorDomainExceptionTest() {
         doThrow(DomainException.class).when(iUserServicePort).findRole(anyLong());
         assertThrows(DomainException.class, () -> restaurantUseCase.saveRestaurant(restaurantModel));
+    }
+
+    @Test
+    void getAllRestaurantsNotFoundTest() {
+
+        int page = 1000;
+        int size = 10;
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+
+        /*doThrow(NoDataFoundException.class).when(iRestaurantPersistencePort).getAllRestaurants(pageable);
+        assertThrows(NoDataFoundException.class, ()-> iRestaurantServicePort.getAllRestaurants(pageable));*/
+
+        when(iRestaurantPersistencePort.getAllRestaurants(pageable)).thenThrow(NoDataFoundException.class);
+        assertThrows(NoDataFoundException.class, () -> restaurantUseCase.getAllRestaurants(pageable));
+    }
+
+    @Test
+    void getAllRestaurantsSuccessfulTest() {
+
+        int page = 1;
+        int size = 10;
+
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+
+        restaurantModel = new RestaurantModel();
+
+        restaurantModel.setName("lanota");
+        restaurantModel.setDirection("turbay ayala");
+        restaurantModel.setIdOwner(1L);
+        restaurantModel.setPhone("31232");
+        restaurantModel.setUrlLogo("fdhgfghfgh/xfnbfgh");
+        restaurantModel.setNit("4545453243");
+
+        List<RestaurantModel> restaurantList = new ArrayList<>();
+        restaurantList.add(restaurantModel);
+
+        when(iRestaurantPersistencePort.getAllRestaurants(pageable)).thenReturn(anyList());
+        assertNotNull(iRestaurantServicePort.getAllRestaurants(pageable));
+        //assertFalse(iRestaurantServicePort.getAllRestaurants(pageable).isEmpty());
     }
 
 }

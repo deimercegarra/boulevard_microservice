@@ -9,6 +9,7 @@ import com.pragma.boulevard_microservice.domain.model.RestaurantModel;
 import com.pragma.boulevard_microservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
-    public List<RestaurantModel> getAllRestaurants() {
-        return iRestaurantPersistencePort.getAllRestaurants();
+    public List<RestaurantModel> getAllRestaurants(Pageable pageable) {
+        return iRestaurantPersistencePort.getAllRestaurants(pageable);
     }
 
     @Override

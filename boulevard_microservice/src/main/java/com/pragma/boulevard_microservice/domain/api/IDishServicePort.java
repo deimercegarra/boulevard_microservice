@@ -15,6 +15,8 @@ public interface IDishServicePort {
 
     CommonResponseModel updateDish(DishModel dishModel);
 
+    CommonResponseModel activeDish(DishModel dishModel);
+
     void deleteDish(Long dishId);
 
 }

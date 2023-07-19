@@ -14,6 +14,8 @@ public interface IDishPersistencePort {
 
     DishModel updateDish(DishModel dishModel);
 
+    DishModel activeDish(DishModel dishModel);
+
     void deleteDish(Long dishId);
 
 }

@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.application.handler.impl;
 
+import com.pragma.boulevard_microservice.application.dto.request.ActiveDishRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.DishUpdateRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
@@ -9,6 +10,7 @@ import com.pragma.boulevard_microservice.application.mapper.ICommonResponseMappe
 import com.pragma.boulevard_microservice.application.mapper.IDishRequestMapper;
 import com.pragma.boulevard_microservice.application.mapper.IDishResponseMapper;
 import com.pragma.boulevard_microservice.domain.api.IDishServicePort;
+import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +45,11 @@ public class DishHandler implements IDishHandler {
     @Override
     public CommonResponseDto updateDish(DishUpdateRequestDto dishUpdateRequestDto) {
         return iCommonResponseMapper.toResponse(iDishServicePort.updateDish(iDishRequestMapper.toDishModel(dishUpdateRequestDto)));
+    }
+
+    @Override
+    public CommonResponseDto activeDish(ActiveDishRequestDto activeDishRequestDto) {
+        return iCommonResponseMapper.toResponse(iDishServicePort.activeDish(iDishRequestMapper.toDishModel(activeDishRequestDto)));
     }
 
     @Override

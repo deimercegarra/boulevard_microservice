@@ -68,6 +68,19 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
+    public CommonResponseModel activeDish(DishModel dishModel) {
+        DishModel dishModelDb = iDishPersistencePort.getDish(dishModel.getId());
+
+        if(dishModelDb == null) {
+            throw new DomainException();
+        }
+
+        iDishPersistencePort.activeDish(dishModel);
+
+        return new CommonResponseModel("200","Dish Updated.", true);
+    }
+
+    @Override
     public void deleteDish(Long dishId) {
         iDishPersistencePort.deleteDish(dishId);
     }

@@ -57,7 +57,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(UnauthorizedUserException.class)
     public ResponseEntity<Map<String, String>> handleUnauthorizedUserException(
             UnauthorizedUserException ignoredUnauthorizedUserException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(MESSAGE,
                         ignoredUnauthorizedUserException.getMessage() != null ? ignoredUnauthorizedUserException.getMessage() : "Unauthorized user."));
     }

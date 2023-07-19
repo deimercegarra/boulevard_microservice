@@ -73,6 +73,20 @@ public class DishJpaAdapter implements IDishPersistencePort {
     }
 
     @Override
+    public DishModel activeDish(DishModel dishModel) {
+        DishEntity dishEntity = iDishRepository.getReferenceById(dishModel.getId());
+
+        RestaurantEntity restaurantEntity = iRestaurantRepository.getReferenceById(dishEntity.getRestaurantEntity().getId());
+
+        if (! (dishModel.getUserId().equals(restaurantEntity.getIdOwner())) )
+            throw new UnauthorizedUserException("Unauthorized user.");
+
+        dishEntity.setActive(dishModel.isActive());
+
+        return iDishEntityMapper.toModel(iDishRepository.save(dishEntity));
+    }
+
+    @Override
     public void deleteDish(Long userId) {
         iDishRepository.deleteById(userId);
     }

@@ -37,6 +37,6 @@ public class DishEntity {
     @Column(name = "url_image")
     private String urlImage;
 
-    private boolean active;
+    private Boolean active;
 
 }

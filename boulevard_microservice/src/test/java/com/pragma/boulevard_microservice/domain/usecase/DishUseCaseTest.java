@@ -12,13 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class DishUseCaseTest {
 
     private IDishPersistencePort iDishPersistencePort;
@@ -113,7 +114,7 @@ class DishUseCaseTest {
     }
 
     @Test
-    void updateDishDishNotFoundDomainExceptionTest() {
+    void updateDishNotFoundDomainExceptionTest() {
         dishModel = new DishModel();
 
         dishModel.setId(0L);
@@ -128,6 +129,31 @@ class DishUseCaseTest {
 
         doThrow(DomainException.class).when(iDishPersistencePort).getDish(dishModel.getId());
         assertThrows(DomainException.class, () -> dishUseCase.updateDish(dishModel));
+    }
+
+    @Test
+    void updateActiveDishTest() {
+        dishModel = new DishModel();
+
+        dishModel.setId(1L);
+        dishModel.setActive(false);
+        dishModel.setUserId(1L);
+
+        when(iDishPersistencePort.getDish(dishModel.getId())).thenReturn(dishModel);
+        when(iDishPersistencePort.activeDish(dishModel)).thenReturn(dishModel);
+        assertNotNull(dishUseCase.activeDish(dishModel));
+    }
+
+    @Test
+    void activeDishNotFoundDomainExceptionTest() {
+        dishModel = new DishModel();
+
+        dishModel.setId(1L);
+        dishModel.setActive(true);
+        dishModel.setUserId(1L);
+
+        when(iDishPersistencePort.getDish(dishModel.getId())).thenThrow(DomainException.class);
+        assertThrows(DomainException.class, () -> dishUseCase.activeDish(dishModel));
     }
 
 }

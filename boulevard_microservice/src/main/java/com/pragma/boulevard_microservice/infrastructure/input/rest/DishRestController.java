@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.infrastructure.input.rest;
 
+import com.pragma.boulevard_microservice.application.dto.request.ActiveDishRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.DishUpdateRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
@@ -48,6 +49,25 @@ public class DishRestController {
     @PutMapping("/")
     public ResponseEntity<CommonResponseDto> updateDish(@Valid  @RequestBody DishUpdateRequestDto dishUpdateRequestDto) {
         CommonResponseDto commonResponseDto = iDishHandler.updateDish(dishUpdateRequestDto);
+
+        if (!commonResponseDto.getStatus())
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(commonResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(commonResponseDto);
+    }
+
+    @Operation(summary = "Enable/Disable a Dish.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dish Updated.", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Dish not found.", content = @Content)
+    })
+    @PutMapping("/active")
+    public ResponseEntity<CommonResponseDto> activeDish(@Valid  @RequestBody ActiveDishRequestDto activeDishRequestDto) {
+        CommonResponseDto commonResponseDto = iDishHandler.activeDish(activeDishRequestDto);
 
         if (!commonResponseDto.getStatus())
             return ResponseEntity.status(HttpStatus.ACCEPTED)

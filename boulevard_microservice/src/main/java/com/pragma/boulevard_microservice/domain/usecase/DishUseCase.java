@@ -10,6 +10,7 @@ import com.pragma.boulevard_microservice.domain.spi.IDishPersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public class DishUseCase implements IDishServicePort {
         this.iDishPersistencePort = iDishPersistencePort;
         this.iRestaurantPersistencePort = iRestaurantPersistencePort;
         this.iUserPersistencePort = iUserPersistencePort;
+    }
+
+    @Override
+    public List<DishModel> getDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable) {
+        return iDishPersistencePort.findDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable );
     }
 
     @Override

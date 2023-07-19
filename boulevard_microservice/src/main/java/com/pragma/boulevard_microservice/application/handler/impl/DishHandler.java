@@ -11,7 +11,9 @@ import com.pragma.boulevard_microservice.application.mapper.IDishRequestMapper;
 import com.pragma.boulevard_microservice.application.mapper.IDishResponseMapper;
 import com.pragma.boulevard_microservice.domain.api.IDishServicePort;
 import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
+import com.pragma.boulevard_microservice.domain.model.DishModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,5 +57,13 @@ public class DishHandler implements IDishHandler {
     @Override
     public void deleteDish(Long dishId) {
         iDishServicePort.deleteDish(dishId);
+    }
+
+    @Override
+    public List<DishResponseDto> getDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable) {
+
+        List<DishModel> dishModelList = iDishServicePort.getDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable );
+
+        return iDishResponseMapper.toResponseList(dishModelList);
     }
 }

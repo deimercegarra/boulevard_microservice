@@ -8,6 +8,7 @@ import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFou
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.UnauthorizedUserException;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.CategoryEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.DishEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IDishEntityMapper;
@@ -15,6 +16,7 @@ import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.ICate
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IDishRepository;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IRestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -89,6 +91,24 @@ public class DishJpaAdapter implements IDishPersistencePort {
     @Override
     public void deleteDish(Long userId) {
         iDishRepository.deleteById(userId);
+    }
+
+    @Override
+    public List<DishModel> findDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable) {
+
+        RestaurantEntity restaurant = new RestaurantEntity();
+        restaurant.setId( idRestaurant );
+
+        CategoryEntity category = new CategoryEntity();
+        category.setId( idCategory );
+
+        List<DishEntity> dishEntityList = iDishRepository.findByRestaurantEntityAndCategoryEntity( idRestaurant, idCategory, pageable );
+
+        if (dishEntityList.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+
+        return iDishEntityMapper.toModelList( dishEntityList );
     }
 
 }

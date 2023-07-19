@@ -4,16 +4,23 @@ import com.pragma.boulevard_microservice.application.dto.request.ActiveDishReque
 import com.pragma.boulevard_microservice.application.dto.request.DishRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.DishUpdateRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
+import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
 import com.pragma.boulevard_microservice.application.handler.IDishHandler;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/dish")
@@ -75,6 +82,26 @@ public class DishRestController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(commonResponseDto);
+    }
+
+    @Operation(summary = "Find all dishes by restaurant and category.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
+    @GetMapping("/restaurant/{idRestaurant}/category/{idCategory}")
+    public ResponseEntity<List<DishResponseDto>> getDishesByRestaurantAndCategory(@PathVariable Long idRestaurant,
+                                                                                  @PathVariable Long idCategory,
+                                                                                  @RequestParam(defaultValue = "1") Integer page,
+                                                                                  @RequestParam(defaultValue = "10") Integer size) {
+
+        return ResponseEntity.ok(
+                iDishHandler.getDishesByRestaurantAndCategory( idRestaurant, idCategory,
+                        PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") )
+                )
+        );
+
     }
 
 }

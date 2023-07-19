@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Getter
-@Setter
+
 public class CommonResponseModel<E>{
 
     private String message;
@@ -36,6 +34,9 @@ public class CommonResponseModel<E>{
         this.code = code;
     }
 
+    public CommonResponseModel() {
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -45,5 +46,45 @@ public class CommonResponseModel<E>{
                 ", id=" + id +
                 ", status=" + status +
                 '}';
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public E getDto() {
+        return dto;
+    }
+
+    public void setDto(E dto) {
+        this.dto = dto;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

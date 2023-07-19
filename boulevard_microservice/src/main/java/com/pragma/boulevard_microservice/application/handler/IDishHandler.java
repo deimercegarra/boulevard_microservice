@@ -7,6 +7,8 @@ import com.pragma.boulevard_microservice.application.dto.response.CommonResponse
 import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
 import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
 import com.pragma.boulevard_microservice.domain.model.DishModel;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.swing.*;
 import java.util.List;
@@ -25,4 +27,5 @@ public interface IDishHandler {
 
     public void deleteDish(Long dishId);
 
+    List<DishResponseDto> getDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable);
 }

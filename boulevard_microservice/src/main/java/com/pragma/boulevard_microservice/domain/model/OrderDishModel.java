@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+
 public class OrderDishModel {
 
     private OrderEntity orderEntity;
@@ -19,4 +16,36 @@ public class OrderDishModel {
 
     private int quantity;
 
+    public OrderDishModel(OrderEntity orderEntity, DishEntity dishEntity, int quantity) {
+        this.orderEntity = orderEntity;
+        this.dishEntity = dishEntity;
+        this.quantity = quantity;
+    }
+
+    public OrderDishModel() {
+    }
+
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
+    }
+
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
+    public DishEntity getDishEntity() {
+        return dishEntity;
+    }
+
+    public void setDishEntity(DishEntity dishEntity) {
+        this.dishEntity = dishEntity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

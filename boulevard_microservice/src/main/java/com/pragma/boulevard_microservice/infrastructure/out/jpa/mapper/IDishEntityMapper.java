@@ -17,5 +17,4 @@ public interface IDishEntityMapper {
     DishEntity toEntity(DishModel dishModel);
     DishModel toModel(DishEntity dishEntity);
     List<DishModel> toModelList(List<DishEntity> dishEntityList);
-
 }

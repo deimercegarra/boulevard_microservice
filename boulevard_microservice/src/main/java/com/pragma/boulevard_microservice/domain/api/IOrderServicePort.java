@@ -1,12 +1,15 @@
 package com.pragma.boulevard_microservice.domain.api;
 
+import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
+import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
+import com.pragma.boulevard_microservice.domain.model.OrderDishModel;
 import com.pragma.boulevard_microservice.domain.model.OrderModel;
 
 import java.util.List;
 
 public interface IOrderServicePort {
 
-    void saveOrder(OrderModel orderModel);
+    CommonResponseModel saveOrder(OrderModel orderModel, List<OrderDishModel> orderDishModelList);
 
     List<OrderModel> getAllOrders();
 

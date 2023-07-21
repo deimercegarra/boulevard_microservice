@@ -1,11 +1,8 @@
 package com.pragma.boulevard_microservice.infrastructure.exceptionhandler;
 
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
-import com.pragma.boulevard_microservice.infrastructure.exception.RestaurantNotFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.*;
 import com.pragma.boulevard_microservice.domain.exception.UserNotFoundException;
-import com.pragma.boulevard_microservice.infrastructure.exception.CategoryNotFoundException;
-import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
-import com.pragma.boulevard_microservice.infrastructure.exception.UnauthorizedUserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -68,6 +65,22 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
                         ignoredUserNotFoundException.getMessage() != null ? ignoredUserNotFoundException.getMessage() : "User not found."));
+    }
+
+    @ExceptionHandler(DishNotBelongRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleDishNotBelongRestaurantException(
+            DishNotBelongRestaurantException ignoredDishNotBelongRestaurantException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredDishNotBelongRestaurantException.getMessage() != null ? ignoredDishNotBelongRestaurantException.getMessage() : "the dish does not belong to the restaurant."));
+    }
+
+    @ExceptionHandler(DishNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleDishNotFoundException(
+            DishNotFoundException ignoredDishNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredDishNotFoundException.getMessage() != null ? ignoredDishNotFoundException.getMessage() : "Dish not found."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

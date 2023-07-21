@@ -58,12 +58,12 @@ public class BeanConfiguration {
     }
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(iOrderPersistencePort());
+        return new OrderUseCase(iOrderPersistencePort(), iOrderDishPersistencePort());
     }
 
     @Bean
     public IOrderDishPersistencePort iOrderDishPersistencePort() {
-        return new OrderDishJpaAdapter(iOrderDishRepository, iOrderDishEntityMapper);
+        return new OrderDishJpaAdapter(iOrderDishRepository, iDishRepository, iOrderDishEntityMapper);
     }
     @Bean
     public IOrderDishServicePort orderDishServicePort() {

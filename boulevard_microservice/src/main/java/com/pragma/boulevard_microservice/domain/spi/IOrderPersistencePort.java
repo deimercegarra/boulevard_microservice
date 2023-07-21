@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IOrderPersistencePort {
 
-    void saveOrder(OrderModel orderModel);
+    OrderModel saveOrder(OrderModel orderModel);
 
     List<OrderModel> getAllOrders();
 
@@ -16,4 +16,5 @@ public interface IOrderPersistencePort {
 
     void deleteOrder(Long orderId);
 
+    List<OrderModel> findOrderInProcessByClient(Long idClient);
 }

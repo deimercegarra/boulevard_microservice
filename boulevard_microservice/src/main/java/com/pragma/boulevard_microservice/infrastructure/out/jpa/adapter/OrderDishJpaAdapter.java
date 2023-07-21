@@ -2,9 +2,13 @@ package com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter;
 
 import com.pragma.boulevard_microservice.domain.model.OrderDishModel;
 import com.pragma.boulevard_microservice.domain.spi.IOrderDishPersistencePort;
+import com.pragma.boulevard_microservice.infrastructure.exception.DishNotBelongRestaurantException;
+import com.pragma.boulevard_microservice.infrastructure.exception.DishNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.DishEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.OrderDishEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IOrderDishEntityMapper;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IDishRepository;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IOrderDishRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -14,10 +18,18 @@ import java.util.List;
 public class OrderDishJpaAdapter implements IOrderDishPersistencePort {
 
     private final IOrderDishRepository iOrderDishRepository;
+    private final IDishRepository iDishRepository;
     private final IOrderDishEntityMapper iOrderDishEntityMapper;
 
     @Override
-    public void saveOrderDish(OrderDishModel orderDishModel) {
+    public void saveOrderDish(OrderDishModel orderDishModel, Long idRestaurant) {
+
+        DishEntity dishEntity = iDishRepository.findById( orderDishModel.getDishModel().getId() ).orElseThrow(DishNotFoundException::new);
+
+        if (!dishEntity.getRestaurantEntity().getId().equals(idRestaurant)){
+            throw new DishNotBelongRestaurantException();
+        }
+
         iOrderDishRepository.save(iOrderDishEntityMapper.toEntity(orderDishModel));
     }
 

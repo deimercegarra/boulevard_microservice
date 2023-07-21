@@ -16,7 +16,7 @@ public class OrderDishUseCase implements IOrderDishServicePort {
 
     @Override
     public void saveOrderDish(OrderDishModel orderDishModel) {
-        iOrderDishPersistencePort.saveOrderDish(orderDishModel);
+        iOrderDishPersistencePort.saveOrderDish(orderDishModel, null);
     }
 
     @Override

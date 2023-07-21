@@ -1,13 +1,14 @@
 package com.pragma.boulevard_microservice.application.handler;
 
 import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
+import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.OrderResponseDto;
 
 import java.util.List;
 
 public interface IOrderHandler {
 
-    public void saveOrder(OrderRequestDto orderRequestDto);
+    public CommonResponseDto saveOrder(OrderRequestDto orderRequestDto);
 
     public List<OrderResponseDto> getAllOrders();
 

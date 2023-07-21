@@ -2,6 +2,7 @@ package com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter;
 
 import com.pragma.boulevard_microservice.domain.model.OrderModel;
 import com.pragma.boulevard_microservice.domain.spi.IOrderPersistencePort;
+import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.OrderEntity;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IOrderEntityMapper;
@@ -17,8 +18,10 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
     private final IOrderEntityMapper iOrderEntityMapper;
 
     @Override
-    public void saveOrder(OrderModel orderModel) {
-        iOrderRepository.save(iOrderEntityMapper.toEntity(orderModel));
+    public OrderModel saveOrder(OrderModel orderModel) {
+        return iOrderEntityMapper.toModel(
+                iOrderRepository.save(iOrderEntityMapper.toEntity(orderModel))
+        );
     }
 
     @Override
@@ -44,6 +47,18 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
     @Override
     public void deleteOrder(Long userId) {
         iOrderRepository.deleteById(userId);
+    }
+
+    @Override
+    public List<OrderModel> findOrderInProcessByClient(Long idClient) {
+        return iOrderEntityMapper.toModelList(
+                iOrderRepository.findByIdClientAndStatus(
+                        idClient,
+                        Constants.ORDER_STATUS_PENDING,
+                        Constants.ORDER_STATUS_PREPARATION,
+                        Constants.ORDER_STATUS_READY
+                )
+        );
     }
 
 }

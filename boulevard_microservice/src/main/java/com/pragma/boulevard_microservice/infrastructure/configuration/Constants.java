@@ -10,4 +10,10 @@ public class Constants {
 
     public static final String ROLE_ADMIN = "Administrator";
 
+    public static final String ORDER_STATUS_PENDING = "Pending";
+    public static final String ORDER_STATUS_PREPARATION = "Preparation";
+    public static final String ORDER_STATUS_CANCELED = "Canceled";
+    public static final String ORDER_STATUS_READY = "Ready";
+    public static final String ORDER_STATUS_DELIVERED = "Delivered";
+
 }

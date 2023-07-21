@@ -13,23 +13,23 @@ public class OrderModel {
 
     private Long id;
 
-    private Long idOwner;
+    private Long idClient;
 
-    private Date date_order;
+    private Date dateOrder;
 
-    private String status;
+    private String statusOrder;
 
     private Long idChef;
 
-    private RestaurantEntity restaurantEntity;
+    private RestaurantModel restaurantModel;
 
-    public OrderModel(Long id, Long idOwner, Date date_order, String status, Long idChef, RestaurantEntity restaurantEntity) {
+    public OrderModel(Long id, Long idClient, Date dateOrder, String statusOrder, Long idChef, RestaurantModel restaurantModel) {
         this.id = id;
-        this.idOwner = idOwner;
-        this.date_order = date_order;
-        this.status = status;
+        this.idClient = idClient;
+        this.dateOrder = dateOrder;
+        this.statusOrder = statusOrder;
         this.idChef = idChef;
-        this.restaurantEntity = restaurantEntity;
+        this.restaurantModel = restaurantModel;
     }
 
     public OrderModel() {
@@ -43,28 +43,28 @@ public class OrderModel {
         this.id = id;
     }
 
-    public Long getIdOwner() {
-        return idOwner;
+    public Long getIdClient() {
+        return idClient;
     }
 
-    public void setIdOwner(Long idOwner) {
-        this.idOwner = idOwner;
+    public void setIdClient(Long idClient) {
+        this.idClient = idClient;
     }
 
-    public Date getDate_order() {
-        return date_order;
+    public Date getDateOrder() {
+        return dateOrder;
     }
 
-    public void setDate_order(Date date_order) {
-        this.date_order = date_order;
+    public void setDateOrder(Date dateOrder) {
+        this.dateOrder = dateOrder;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusOrder() {
+        return statusOrder;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusOrder(String statusOrder) {
+        this.statusOrder = statusOrder;
     }
 
     public Long getIdChef() {
@@ -75,11 +75,11 @@ public class OrderModel {
         this.idChef = idChef;
     }
 
-    public RestaurantEntity getRestaurantEntity() {
-        return restaurantEntity;
+    public RestaurantModel getRestaurantModel() {
+        return restaurantModel;
     }
 
-    public void setRestaurantEntity(RestaurantEntity restaurantEntity) {
-        this.restaurantEntity = restaurantEntity;
+    public void setRestaurantModel(RestaurantModel restaurantModel) {
+        this.restaurantModel = restaurantModel;
     }
 }

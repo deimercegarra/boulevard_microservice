@@ -10,35 +10,35 @@ import lombok.Setter;
 
 public class OrderDishModel {
 
-    private OrderEntity orderEntity;
+    private OrderModel orderModel;
 
-    private DishEntity dishEntity;
+    private DishModel dishModel;
 
     private int quantity;
 
-    public OrderDishModel(OrderEntity orderEntity, DishEntity dishEntity, int quantity) {
-        this.orderEntity = orderEntity;
-        this.dishEntity = dishEntity;
+    public OrderDishModel(OrderModel orderModel, DishModel dishModel, int quantity) {
+        this.orderModel = orderModel;
+        this.dishModel = dishModel;
         this.quantity = quantity;
     }
 
     public OrderDishModel() {
     }
 
-    public OrderEntity getOrderEntity() {
-        return orderEntity;
+    public OrderModel getOrderModel() {
+        return orderModel;
     }
 
-    public void setOrderEntity(OrderEntity orderEntity) {
-        this.orderEntity = orderEntity;
+    public void setOrderModel(OrderModel orderModel) {
+        this.orderModel = orderModel;
     }
 
-    public DishEntity getDishEntity() {
-        return dishEntity;
+    public DishModel getDishModel() {
+        return dishModel;
     }
 
-    public void setDishEntity(DishEntity dishEntity) {
-        this.dishEntity = dishEntity;
+    public void setDishModel(DishModel dishModel) {
+        this.dishModel = dishModel;
     }
 
     public int getQuantity() {

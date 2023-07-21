@@ -1,11 +1,15 @@
 package com.pragma.boulevard_microservice.infrastructure.input.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
+import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
+import com.pragma.boulevard_microservice.application.handler.IOrderHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,24 +29,25 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OrderRestController {
 
-    /*private final IOrderHandler orderHandler;
+    private final IOrderHandler iOrderHandler;
 
-    @Operation(summary = "Add a new order",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Order created",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
-                    @ApiResponse(responseCode = "409", description = "Dish is not in restaurant",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
-                    @ApiResponse(responseCode = "404", description = "Dish not found",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @Operation(summary = "Add a new order.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
     @PostMapping("")
-    public ResponseEntity<Map<String, String>> saveOrder(@Valid @RequestBody OrderRequestDto orderRequestDto,
-                                                              @RequestHeader HttpHeaders headers) {
-        String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);
-        orderHandler.saveOrder(orderRequestDto, token);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
+    public ResponseEntity<CommonResponseDto> saveOrder(@Valid @RequestBody OrderRequestDto orderRequestDto) {
+        CommonResponseDto commonResponseDto = iOrderHandler.saveOrder(orderRequestDto);
 
-    }*/
+        if (!commonResponseDto.getStatus())
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(commonResponseDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(commonResponseDto);
+
+    }
 
 }

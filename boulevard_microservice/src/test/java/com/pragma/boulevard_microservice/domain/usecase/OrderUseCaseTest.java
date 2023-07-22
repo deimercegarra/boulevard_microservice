@@ -1,18 +1,20 @@
 package com.pragma.boulevard_microservice.domain.usecase;
 
+import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
-import com.pragma.boulevard_microservice.domain.model.DishModel;
-import com.pragma.boulevard_microservice.domain.model.OrderDishModel;
-import com.pragma.boulevard_microservice.domain.model.OrderModel;
-import com.pragma.boulevard_microservice.domain.model.RestaurantModel;
+import com.pragma.boulevard_microservice.domain.model.*;
+import com.pragma.boulevard_microservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IOrderDishPersistencePort;
 import com.pragma.boulevard_microservice.domain.spi.IOrderPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotBelongRestaurantException;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotFoundException;
+import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,15 +28,19 @@ class OrderUseCaseTest {
 
     private IOrderPersistencePort iOrderPersistencePort;
     private IOrderDishPersistencePort iOrderDishPersistencePort;
+    private IOrderServicePort iOrderServicePort;
     private OrderUseCase orderUseCase;
+    private IEmployeePersistencePort iEmployeePersistencePort;
 
     @BeforeEach
     void setUp(){
 
         iOrderPersistencePort = mock(IOrderPersistencePort.class);
         iOrderDishPersistencePort = mock(IOrderDishPersistencePort.class);
+        iEmployeePersistencePort = mock(IEmployeePersistencePort.class);
+        iOrderServicePort = mock(IOrderServicePort.class);
 
-        orderUseCase = new OrderUseCase(iOrderPersistencePort, iOrderDishPersistencePort);
+        orderUseCase = new OrderUseCase(iOrderPersistencePort, iOrderDishPersistencePort, iEmployeePersistencePort);
         MockitoAnnotations.initMocks(this);
 
     }
@@ -139,6 +145,33 @@ class OrderUseCaseTest {
 
         when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(orderList);
         assertThrows(DomainException.class, () -> orderUseCase.saveOrder(order, dishList));*/
+    }
+
+    @Test
+    void getOrderByStatusTest() {
+        Pageable pageable = PageRequest.of( 0, 10 );
+
+        RestaurantModel restaurantModel = new RestaurantModel();
+        restaurantModel.setId(1L);
+
+        EmployeeModel employeeModel = new EmployeeModel(1L, 6L, restaurantModel);
+
+        when(iEmployeePersistencePort.findByIdEmployee(6L)).thenReturn(employeeModel);
+        assertNotNull(orderUseCase.getOrderByStatus("Pending", 6L, pageable));
+    }
+
+    @Test
+    void getOrderByStatusNoDataFoundExceptionTest() {
+        Pageable pageable = PageRequest.of( 0, 10 );
+
+        RestaurantModel restaurantModel = new RestaurantModel();
+        restaurantModel.setId(2L);
+
+        EmployeeModel employeeModel = new EmployeeModel(1L, 7L, restaurantModel);
+
+        when(iEmployeePersistencePort.findByIdEmployee(6L)).thenReturn(employeeModel);
+        when(iOrderPersistencePort.getOrderByStatus(2L, "Delivered", pageable)).thenThrow(NoDataFoundException.class);
+        assertThrows(NoDataFoundException.class, () -> orderUseCase.getOrderByStatus("Delivered", 6L, pageable));
     }
 
 }

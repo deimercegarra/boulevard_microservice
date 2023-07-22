@@ -3,6 +3,8 @@ package com.pragma.boulevard_microservice.infrastructure.input.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
+import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
+import com.pragma.boulevard_microservice.application.dto.response.OrderResponseDto;
 import com.pragma.boulevard_microservice.application.handler.IOrderHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,29 @@ public class OrderRestController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(commonResponseDto);
+
+    }
+
+    /*
+    The employeeID is the id of the user with the employee role from the user table.
+     */
+    @Operation(summary = "Find all orders by status.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderResponseDto>> getOrderByStatus(@RequestParam String status,
+                                                                                   @RequestParam Long employeeId,
+                                                                                   @RequestParam(defaultValue = "1") Integer page,
+                                                                                   @RequestParam(defaultValue = "10") Integer size) {
+
+        return ResponseEntity.ok(
+                iOrderHandler.getOrderByStatus( status, employeeId,
+                        PageRequest.of( page-1, size)
+                )
+        );
 
     }
 

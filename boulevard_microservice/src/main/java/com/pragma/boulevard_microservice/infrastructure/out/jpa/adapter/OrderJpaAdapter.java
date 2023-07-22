@@ -8,6 +8,7 @@ import com.pragma.boulevard_microservice.infrastructure.out.jpa.entity.OrderEnti
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.IOrderEntityMapper;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.IOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -59,6 +60,18 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
                         Constants.ORDER_STATUS_READY
                 )
         );
+    }
+
+    @Override
+    public List<OrderModel> getOrderByStatus(Long idRestaurant, String status, Pageable pageable) {
+
+        List<OrderEntity> orderEntityList = iOrderRepository.getOrderByStatus(idRestaurant, status, pageable);
+
+        if (orderEntityList.isEmpty()){
+            throw new NoDataFoundException();
+        }
+
+        return iOrderEntityMapper.toModelList( orderEntityList );
     }
 
 }

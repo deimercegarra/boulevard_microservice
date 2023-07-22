@@ -12,14 +12,14 @@ public class OrderResponseDto {
 
     private Long id;
 
-    private Long idOwner;
+    private Long idClient;
 
-    private Date date_order;
+    private Date dateOrder;
 
-    private String status;
+    private String statusOrder;
 
     private Long idChef;
 
-    private RestaurantEntity restaurantEntity;
+    private Long idRestaurant;
 
 }

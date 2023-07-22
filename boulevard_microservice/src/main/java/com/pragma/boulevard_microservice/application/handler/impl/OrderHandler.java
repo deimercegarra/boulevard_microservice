@@ -10,6 +10,7 @@ import com.pragma.boulevard_microservice.application.mapper.IOrderRequestMapper;
 import com.pragma.boulevard_microservice.application.mapper.IOrderResponseMapper;
 import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +38,6 @@ public class OrderHandler implements IOrderHandler {
     }
 
     @Override
-    public List<OrderResponseDto> getAllOrders() {
-        return iOrderResponseMapper.toResponseList(iOrderServicePort.getAllOrders());
-    }
-
-    @Override
     public OrderResponseDto getOrder(Long orderId) {
         return iOrderResponseMapper.toResponse(iOrderServicePort.getOrder(orderId));
     }
@@ -54,5 +50,12 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public void deleteOrder(Long orderId) {
         iOrderServicePort.deleteOrder(orderId);
+    }
+
+    @Override
+    public List<OrderResponseDto> getOrderByStatus(String status, Long employeeId, Pageable pageable) {
+        return iOrderResponseMapper.toResponseList(
+                iOrderServicePort.getOrderByStatus(status, employeeId, pageable)
+        );
     }
 }

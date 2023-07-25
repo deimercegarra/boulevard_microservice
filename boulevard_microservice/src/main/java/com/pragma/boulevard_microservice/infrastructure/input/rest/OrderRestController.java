@@ -1,6 +1,7 @@
 package com.pragma.boulevard_microservice.infrastructure.input.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pragma.boulevard_microservice.application.dto.request.OrderAssignRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.DishResponseDto;
@@ -50,7 +51,6 @@ public class OrderRestController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(commonResponseDto);
-
     }
 
     /*
@@ -72,6 +72,22 @@ public class OrderRestController {
                 iOrderHandler.getOrderByStatus( status, employeeId,
                         PageRequest.of( page-1, size)
                 )
+        );
+
+    }
+
+    @Operation(summary = "Be assigned to one or more orders.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
+    @PutMapping("/assign")
+    public ResponseEntity<List<OrderResponseDto>> assignToOrder(@Valid @RequestBody List<OrderAssignRequestDto> orderAssignRequestDtoList,
+                                                                                   @RequestParam Long employeeId){
+
+        return ResponseEntity.ok(
+                iOrderHandler.assignToOrder( orderAssignRequestDtoList, employeeId)
         );
 
     }

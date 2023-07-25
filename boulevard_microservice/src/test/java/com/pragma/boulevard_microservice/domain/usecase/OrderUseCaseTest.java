@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.domain.usecase;
 
+import com.pragma.boulevard_microservice.DatosTest;
 import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
 import com.pragma.boulevard_microservice.domain.model.*;
@@ -122,12 +123,15 @@ class OrderUseCaseTest {
     }
 
     @Test
-    void saveOrderDomainExceptionTest() {/*
+    void saveOrderDomainExceptionTest() {
+        Long idClient = 3L;
+
         RestaurantModel restaurant = new RestaurantModel();
         restaurant.setId(1L);
         OrderModel order = new OrderModel();
         order.setId(4L);
         order.setRestaurantModel(restaurant);
+        order.setIdClient(idClient);
 
         OrderDishModel orderDish = new OrderDishModel();
         DishModel dish = new DishModel();
@@ -138,13 +142,13 @@ class OrderUseCaseTest {
         List<OrderDishModel> dishList = new ArrayList<>();
         dishList.add(orderDish);
 
-        Long idClient = 3L;
-
         List<OrderModel> orderList = new ArrayList<>();
         orderList.add(order);
 
         when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(orderList);
-        assertThrows(DomainException.class, () -> orderUseCase.saveOrder(order, dishList));*/
+        //when(iOrderPersistencePort.saveOrder(order)).thenReturn(order);
+        when(iOrderServicePort.saveOrder(order, dishList)).thenThrow(DomainException.class);
+        assertThrows(DomainException.class, () -> orderUseCase.saveOrder(order, dishList));
     }
 
     @Test
@@ -172,6 +176,33 @@ class OrderUseCaseTest {
         when(iEmployeePersistencePort.findByIdEmployee(6L)).thenReturn(employeeModel);
         when(iOrderPersistencePort.getOrderByStatus(2L, "Delivered", pageable)).thenThrow(NoDataFoundException.class);
         assertThrows(NoDataFoundException.class, () -> orderUseCase.getOrderByStatus("Delivered", 6L, pageable));
+    }
+
+    @Test
+    void assignToOrderSuccessfulTest() {
+        when(iEmployeePersistencePort.findByIdEmployee(7L)).thenReturn(DatosTest.EMPLOYEE_001);
+        when(iOrderPersistencePort.getOrder(1L)).thenReturn(DatosTest.ORDER_MODEL_001);
+        when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_001)).thenReturn(DatosTest.ORDER_MODEL_001);
+
+        assertNotNull(orderUseCase.assignToOrder(DatosTest.ORDER_MODEL_LIST_001, 7L));
+    }
+
+    @Test
+    void assignToOrderEmptyListExceptionTest() {
+        assertThrows(DomainException.class, () -> orderUseCase.assignToOrder(new ArrayList<>(), 7L));
+    }
+
+    @Test
+    void assignToOrderEmployeeNotFoundExceptionTest() {
+        assertThrows(DomainException.class, () -> orderUseCase.assignToOrder(DatosTest.ORDER_MODEL_LIST_001, 7L));
+    }
+
+    @Test
+    void assignToOrderNotBelongRestaurantExceptionTest() {
+        when(iEmployeePersistencePort.findByIdEmployee(7L)).thenReturn(DatosTest.EMPLOYEE_001);
+        when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_002);
+
+        assertThrows(DomainException.class, () -> orderUseCase.assignToOrder(DatosTest.ORDER_MODEL_LIST_002, 7L));
     }
 
 }

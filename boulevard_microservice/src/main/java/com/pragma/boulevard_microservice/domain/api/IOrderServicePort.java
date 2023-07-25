@@ -18,4 +18,6 @@ public interface IOrderServicePort {
     void deleteOrder(Long orderId);
 
     List<OrderModel> getOrderByStatus(String status, Long employeeId, Pageable pageable);
+
+    List<OrderModel> assignToOrder(List<OrderModel> modelList, Long employeeId);
 }

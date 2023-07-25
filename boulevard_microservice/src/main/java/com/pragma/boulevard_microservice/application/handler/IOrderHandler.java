@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.application.handler;
 
+import com.pragma.boulevard_microservice.application.dto.request.OrderAssignRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.OrderResponseDto;
@@ -18,4 +19,6 @@ public interface IOrderHandler {
     public void deleteOrder(Long orderId);
 
     List<OrderResponseDto> getOrderByStatus(String status, Long employeeId, Pageable pageable);
+
+    List<OrderResponseDto> assignToOrder(List<OrderAssignRequestDto> orderAssignRequestDtoList, Long employeeId);
 }

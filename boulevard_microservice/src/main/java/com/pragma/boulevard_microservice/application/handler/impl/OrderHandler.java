@@ -1,13 +1,11 @@
 package com.pragma.boulevard_microservice.application.handler.impl;
 
+import com.pragma.boulevard_microservice.application.dto.request.OrderAssignRequestDto;
 import com.pragma.boulevard_microservice.application.dto.request.OrderRequestDto;
 import com.pragma.boulevard_microservice.application.dto.response.CommonResponseDto;
 import com.pragma.boulevard_microservice.application.dto.response.OrderResponseDto;
 import com.pragma.boulevard_microservice.application.handler.IOrderHandler;
-import com.pragma.boulevard_microservice.application.mapper.ICommonResponseMapper;
-import com.pragma.boulevard_microservice.application.mapper.IOrderDishRequestMapper;
-import com.pragma.boulevard_microservice.application.mapper.IOrderRequestMapper;
-import com.pragma.boulevard_microservice.application.mapper.IOrderResponseMapper;
+import com.pragma.boulevard_microservice.application.mapper.*;
 import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +24,7 @@ public class OrderHandler implements IOrderHandler {
     private final IOrderResponseMapper iOrderResponseMapper;
     private final IOrderDishRequestMapper iOrderDishRequestMapper;
     private final ICommonResponseMapper iCommonResponseMapper;
+    private final IOrderUpdateRequestMapper iOrderUpdateRequestMapper;
 
     @Override
     public CommonResponseDto saveOrder(OrderRequestDto OrderRequestDto) {
@@ -58,4 +57,14 @@ public class OrderHandler implements IOrderHandler {
                 iOrderServicePort.getOrderByStatus(status, employeeId, pageable)
         );
     }
+
+    @Override
+    public List<OrderResponseDto> assignToOrder(List<OrderAssignRequestDto> orderAssignRequestDtoList, Long employeeId) {
+        return iOrderResponseMapper.toResponseList(
+                iOrderServicePort.assignToOrder(
+                        iOrderUpdateRequestMapper.toModelList(orderAssignRequestDtoList),
+                        employeeId)
+        );
+    }
+
 }

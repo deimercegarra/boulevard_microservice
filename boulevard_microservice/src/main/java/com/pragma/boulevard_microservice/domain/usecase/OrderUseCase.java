@@ -12,6 +12,7 @@ import com.pragma.boulevard_microservice.domain.spi.IOrderPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,4 +76,38 @@ public class OrderUseCase implements IOrderServicePort {
 
         return iOrderPersistencePort.getOrderByStatus(idRestaurant, status, pageable);
     }
+
+    @Override
+    public List<OrderModel> assignToOrder(List<OrderModel> modelList, Long employeeId) {
+
+        if (modelList.isEmpty()) {
+            throw new DomainException("The sent list is empty.");
+        }
+
+        EmployeeModel employeeModel = iEmployeePersistencePort.findByIdEmployee(employeeId);
+
+        if (employeeModel == null){
+            throw new DomainException("An employee with the submitted id was not found.");
+        }
+
+        List<OrderModel> orderListUpdated = new ArrayList<>();
+
+        for ( OrderModel order: modelList ) {
+
+            order = iOrderPersistencePort.getOrder(order.getId());
+
+            if (! (order.getRestaurantModel().getId().equals(employeeModel.getRestaurantModel().getId()))){
+                throw new DomainException("One of the orders does not belong to the employee's restaurant.");
+            }
+
+            order.setIdChef(employeeModel.getId());
+            order.setStatusOrder(Constants.ORDER_STATUS_PREPARATION);
+            order = iOrderPersistencePort.saveOrder(order);
+
+            orderListUpdated.add(order);
+        }
+
+        return orderListUpdated;
+    }
+
 }

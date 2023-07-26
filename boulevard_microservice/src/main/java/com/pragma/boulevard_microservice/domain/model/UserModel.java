@@ -17,10 +17,9 @@ public class UserModel {
     private String phone;
     private Date birthDate;
     private String email;
-    private String key;
-    private RoleModel roleEntity;
+    private String password;
 
-    public UserModel(Long id, String name, String lastName, String documentNumber, String phone, Date birthDate, String email, String key, RoleModel roleEntity) {
+    public UserModel(Long id, String name, String lastName, String documentNumber, String phone, Date birthDate, String email, String password) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -28,8 +27,7 @@ public class UserModel {
         this.phone = phone;
         this.birthDate = birthDate;
         this.email = email;
-        this.key = key;
-        this.roleEntity = roleEntity;
+        this.password = password;
     }
 
     public UserModel() {
@@ -91,19 +89,11 @@ public class UserModel {
         this.email = email;
     }
 
-    public String getKey() {
-        return key;
+    public String getPassword() {
+        return password;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public RoleModel getRoleEntity() {
-        return roleEntity;
-    }
-
-    public void setRoleEntity(RoleModel roleEntity) {
-        this.roleEntity = roleEntity;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

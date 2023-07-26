@@ -92,4 +92,23 @@ public class OrderRestController {
 
     }
 
+    @Operation(summary = "Notify that the order is ready.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
+    @PutMapping("/ready/{order_id}")
+    public ResponseEntity<CommonResponseDto> changeStatusToReady(@PathVariable("order_id") Long orderId) {
+
+        CommonResponseDto commonResponseDto = iOrderHandler.orderReady(orderId);
+
+        if (!commonResponseDto.getStatus())
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(commonResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(commonResponseDto);
+    }
+
 }

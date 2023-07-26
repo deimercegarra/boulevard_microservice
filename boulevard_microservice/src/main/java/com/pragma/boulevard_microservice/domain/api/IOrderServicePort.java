@@ -20,4 +20,6 @@ public interface IOrderServicePort {
     List<OrderModel> getOrderByStatus(String status, Long employeeId, Pageable pageable);
 
     List<OrderModel> assignToOrder(List<OrderModel> modelList, Long employeeId);
+
+    CommonResponseModel orderReady(Long orderId);
 }

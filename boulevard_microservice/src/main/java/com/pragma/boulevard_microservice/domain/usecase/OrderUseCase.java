@@ -1,14 +1,10 @@
 package com.pragma.boulevard_microservice.domain.usecase;
 
 import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
+import com.pragma.boulevard_microservice.domain.exception.BadRequestException;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
-import com.pragma.boulevard_microservice.domain.model.CommonResponseModel;
-import com.pragma.boulevard_microservice.domain.model.EmployeeModel;
-import com.pragma.boulevard_microservice.domain.model.OrderDishModel;
-import com.pragma.boulevard_microservice.domain.model.OrderModel;
-import com.pragma.boulevard_microservice.domain.spi.IEmployeePersistencePort;
-import com.pragma.boulevard_microservice.domain.spi.IOrderDishPersistencePort;
-import com.pragma.boulevard_microservice.domain.spi.IOrderPersistencePort;
+import com.pragma.boulevard_microservice.domain.model.*;
+import com.pragma.boulevard_microservice.domain.spi.*;
 import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
 import org.springframework.data.domain.Pageable;
 
@@ -22,13 +18,20 @@ public class OrderUseCase implements IOrderServicePort {
     private final IOrderDishPersistencePort iOrderDishPersistencePort;
 
     private final IEmployeePersistencePort iEmployeePersistencePort;
+    private final IUserPersistencePort iUserPersistencePort;
+
+    private final IMessagingPersistencePort iMessagingPersistencePort;
 
     public OrderUseCase(IOrderPersistencePort iOrderPersistencePort,
                         IOrderDishPersistencePort iOrderDishPersistencePort,
-                        IEmployeePersistencePort iEmployeePersistencePort) {
+                        IEmployeePersistencePort iEmployeePersistencePort,
+                        IUserPersistencePort iUserPersistencePort,
+                        IMessagingPersistencePort iMessagingPersistencePort) {
         this.iOrderPersistencePort = iOrderPersistencePort;
         this.iOrderDishPersistencePort = iOrderDishPersistencePort;
         this.iEmployeePersistencePort = iEmployeePersistencePort;
+        this.iUserPersistencePort = iUserPersistencePort;
+        this.iMessagingPersistencePort = iMessagingPersistencePort;
     }
 
     @Override
@@ -108,6 +111,28 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         return orderListUpdated;
+    }
+
+    @Override
+    public CommonResponseModel orderReady(Long orderId) {
+
+        OrderModel orderModel = iOrderPersistencePort.getOrder(orderId);
+
+        if (!orderModel.getStatusOrder().equals(Constants.ORDER_STATUS_PREPARATION)) {
+            throw new BadRequestException("The order cannot be ready, it is not being prepared.");
+        }
+
+        UserModel clientUserModel = iUserPersistencePort.findUserById(orderModel.getIdClient()).getDto();
+
+        orderModel.setStatusOrder(Constants.ORDER_STATUS_READY);
+        iOrderPersistencePort.saveOrder(orderModel);
+
+        iMessagingPersistencePort.sendCodeVerification(
+                "Your order is ready.",
+                clientUserModel.getPhone()
+        );
+
+        return new CommonResponseModel("200","OK.", true);
     }
 
 }

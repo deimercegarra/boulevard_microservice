@@ -21,4 +21,6 @@ public interface IOrderHandler {
     List<OrderResponseDto> getOrderByStatus(String status, Long employeeId, Pageable pageable);
 
     List<OrderResponseDto> assignToOrder(List<OrderAssignRequestDto> orderAssignRequestDtoList, Long employeeId);
+
+    CommonResponseDto orderReady(Long orderId);
 }

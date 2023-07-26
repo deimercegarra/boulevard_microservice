@@ -2,11 +2,10 @@ package com.pragma.boulevard_microservice.domain.usecase;
 
 import com.pragma.boulevard_microservice.DatosTest;
 import com.pragma.boulevard_microservice.domain.api.IOrderServicePort;
+import com.pragma.boulevard_microservice.domain.exception.BadRequestException;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
 import com.pragma.boulevard_microservice.domain.model.*;
-import com.pragma.boulevard_microservice.domain.spi.IEmployeePersistencePort;
-import com.pragma.boulevard_microservice.domain.spi.IOrderDishPersistencePort;
-import com.pragma.boulevard_microservice.domain.spi.IOrderPersistencePort;
+import com.pragma.boulevard_microservice.domain.spi.*;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotBelongRestaurantException;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
@@ -19,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +33,9 @@ class OrderUseCaseTest {
     private OrderUseCase orderUseCase;
     private IEmployeePersistencePort iEmployeePersistencePort;
 
+    private IUserPersistencePort iUserPersistencePort;
+    private IMessagingPersistencePort iMessagingPersistencePort;
+
     @BeforeEach
     void setUp(){
 
@@ -40,8 +43,11 @@ class OrderUseCaseTest {
         iOrderDishPersistencePort = mock(IOrderDishPersistencePort.class);
         iEmployeePersistencePort = mock(IEmployeePersistencePort.class);
         iOrderServicePort = mock(IOrderServicePort.class);
+        iUserPersistencePort = mock(IUserPersistencePort.class);
+        iMessagingPersistencePort = mock(IMessagingPersistencePort.class);
 
-        orderUseCase = new OrderUseCase(iOrderPersistencePort, iOrderDishPersistencePort, iEmployeePersistencePort);
+        orderUseCase = new OrderUseCase(iOrderPersistencePort, iOrderDishPersistencePort, iEmployeePersistencePort,
+                iUserPersistencePort, iMessagingPersistencePort);
         MockitoAnnotations.initMocks(this);
 
     }
@@ -203,6 +209,26 @@ class OrderUseCaseTest {
         when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_002);
 
         assertThrows(DomainException.class, () -> orderUseCase.assignToOrder(DatosTest.ORDER_MODEL_LIST_002, 7L));
+    }
+
+    @Test
+    void orderReadyTest() {
+        CommonResponseModel<UserModel> commonResponseModel = new CommonResponseModel<>(true, "200", "OK", DatosTest.USER_MODEL_001);
+
+        when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_002);
+        when(iUserPersistencePort.findUserById(DatosTest.ORDER_MODEL_002.getIdClient())).thenReturn(commonResponseModel);
+        when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_002)).thenReturn(DatosTest.ORDER_MODEL_002);
+        when(iMessagingPersistencePort.sendCodeVerification("Your order is ready.", DatosTest.USER_MODEL_001.getPhone())).thenReturn(any(HashMap.class));
+
+        assertNotNull(orderUseCase.orderReady(2L));
+    }
+
+    @Test
+    void orderReadyBadRequestExceptionTest() {
+
+        when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_001);
+        assertThrows(BadRequestException.class, () -> orderUseCase.orderReady(2L));
+
     }
 
 }

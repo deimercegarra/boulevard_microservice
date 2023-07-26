@@ -19,5 +19,9 @@ user_microservice:
   name: "user-microservice"
   url: "http://localhost:8082"
 
+messaging_microservice:
+  name: "messaging-microservice"
+  url: "http://localhost:8085"
+
 appDescription: "Pragma boulevard"
 appVersion: "1.0.0"

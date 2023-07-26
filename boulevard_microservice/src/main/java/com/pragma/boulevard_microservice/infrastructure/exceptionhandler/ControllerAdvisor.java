@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.infrastructure.exceptionhandler;
 
+import com.pragma.boulevard_microservice.domain.exception.BadRequestException;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
 import com.pragma.boulevard_microservice.infrastructure.exception.*;
 import com.pragma.boulevard_microservice.domain.exception.UserNotFoundException;
@@ -48,7 +49,15 @@ public class ControllerAdvisor {
             DomainException ignoredDomainException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
-                        ignoredDomainException.getMessage() != null ? ignoredDomainException.getMessage() : "No data found for the requested petition"));
+                        ignoredDomainException.getMessage() != null ? ignoredDomainException.getMessage() : "No data found for the requested petition."));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequestException(
+            BadRequestException ignoredBadRequestException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredBadRequestException.getMessage() != null ? ignoredBadRequestException.getMessage() : "Bad request."));
     }
 
     @ExceptionHandler(UnauthorizedUserException.class)

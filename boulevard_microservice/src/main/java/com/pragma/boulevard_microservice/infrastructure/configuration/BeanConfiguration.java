@@ -5,6 +5,7 @@ import com.pragma.boulevard_microservice.domain.api.*;
 import com.pragma.boulevard_microservice.domain.spi.*;
 import com.pragma.boulevard_microservice.domain.usecase.*;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.adapter.*;
+import com.pragma.boulevard_microservice.infrastructure.out.jpa.client.usermicroservice.TwilioClient;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.client.usermicroservice.UserClient;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.mapper.*;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.repository.*;
@@ -35,6 +36,8 @@ public class BeanConfiguration {
     private final ICommonResponseMapper iCommonResponseMapper;
     private final IEmployeeRepository iEmployeeRepository;
     private final IEmployeeEntityMapper iEmployeeEntityMapper;
+    private final TwilioClient twilioClient;
+
     @Bean
     public ICategoryPersistencePort iCategoryPersistencePort() {
         return new CategoryJpaAdapter(iCategoryRepository, iCategoryEntityMapper);
@@ -59,8 +62,14 @@ public class BeanConfiguration {
     }
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(iOrderPersistencePort(), iOrderDishPersistencePort(), iEmployeePersistencePort());
+        return new OrderUseCase(iOrderPersistencePort(), iOrderDishPersistencePort(), iEmployeePersistencePort(), iUserPersistencePort(), iMessagingPersistencePort());
     }
+
+    @Bean
+    public IMessagingPersistencePort iMessagingPersistencePort(){
+        return new MessagingJpaAdapter(twilioClient);
+    }
+
     @Bean
     public IEmployeePersistencePort iEmployeePersistencePort(){
         return new EmployeeJpaAdapter(iEmployeeRepository, iEmployeeEntityMapper);

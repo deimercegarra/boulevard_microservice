@@ -23,4 +23,6 @@ public interface IOrderHandler {
     List<OrderResponseDto> assignToOrder(List<OrderAssignRequestDto> orderAssignRequestDtoList, Long employeeId);
 
     CommonResponseDto orderReady(Long orderId);
+
+    CommonResponseDto orderDelivered(Long orderId, String code);
 }

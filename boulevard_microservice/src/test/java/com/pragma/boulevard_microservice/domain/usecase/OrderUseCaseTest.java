@@ -6,6 +6,7 @@ import com.pragma.boulevard_microservice.domain.exception.BadRequestException;
 import com.pragma.boulevard_microservice.domain.exception.DomainException;
 import com.pragma.boulevard_microservice.domain.model.*;
 import com.pragma.boulevard_microservice.domain.spi.*;
+import com.pragma.boulevard_microservice.infrastructure.configuration.Constants;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotBelongRestaurantException;
 import com.pragma.boulevard_microservice.infrastructure.exception.DishNotFoundException;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
@@ -16,10 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -228,6 +226,42 @@ class OrderUseCaseTest {
 
         when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_001);
         assertThrows(BadRequestException.class, () -> orderUseCase.orderReady(2L));
+
+    }
+
+    @Test
+    void orderDeliveredTest() {
+        CommonResponseModel<UserModel> commonResponseModel = new CommonResponseModel<>(true, "200", "OK", DatosTest.USER_MODEL_001);
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put(Constants.VERIFICATION_STATUS_KEY, Constants.APPROVED_STATUS);
+
+        when(iOrderPersistencePort.getOrder(3L)).thenReturn(DatosTest.ORDER_MODEL_003);
+        when(iUserPersistencePort.findUserById(DatosTest.ORDER_MODEL_003.getIdClient())).thenReturn(commonResponseModel);
+        when(iMessagingPersistencePort.validateCodeVerification("595110", DatosTest.USER_MODEL_001.getPhone())).thenReturn(responseMap);
+        when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_004)).thenReturn(DatosTest.ORDER_MODEL_004);
+
+        assertNotNull(orderUseCase.orderDelivered(3L, "595110"));
+    }
+
+    @Test
+    void orderDeliveredStatusExceptionTest() {
+
+        when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_001);
+        assertThrows(BadRequestException.class, () -> orderUseCase.orderDelivered(2L, "595110"));
+
+    }
+
+    @Test
+    void orderDeliveredCodeExceptionTest() {
+        CommonResponseModel<UserModel> commonResponseModel = new CommonResponseModel<>(true, "200", "OK", DatosTest.USER_MODEL_001);
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put(Constants.VERIFICATION_STATUS_KEY, "pending");
+
+        when(iOrderPersistencePort.getOrder(3L)).thenReturn(DatosTest.ORDER_MODEL_003);
+        when(iUserPersistencePort.findUserById(DatosTest.ORDER_MODEL_003.getIdClient())).thenReturn(commonResponseModel);
+        when(iMessagingPersistencePort.validateCodeVerification("595110", DatosTest.USER_MODEL_001.getPhone())).thenReturn(responseMap);
+
+        assertThrows(BadRequestException.class, () -> orderUseCase.orderDelivered(3L, "595110"));
 
     }
 

@@ -111,4 +111,23 @@ public class OrderRestController {
                 .body(commonResponseDto);
     }
 
+    @Operation(summary = "Mark order as delivered.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+            @ApiResponse(responseCode = "202", description = "Request accepted but unsuccessful.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not found.", content = @Content)
+    })
+    @PutMapping("/deliver/{order_id}")
+    public ResponseEntity<CommonResponseDto> changeStatusToDelivered(@PathVariable("order_id") Long orderId, @RequestParam("code") String code) {
+
+        CommonResponseDto commonResponseDto = iOrderHandler.orderDelivered(orderId, code);
+
+        if (!commonResponseDto.getStatus())
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(commonResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(commonResponseDto);
+    }
+
 }

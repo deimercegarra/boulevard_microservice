@@ -72,4 +72,9 @@ public class OrderHandler implements IOrderHandler {
         return iCommonResponseMapper.toResponse(iOrderServicePort.orderReady(orderId));
     }
 
+    @Override
+    public CommonResponseDto orderDelivered(Long orderId, String code) {
+        return iCommonResponseMapper.toResponse(iOrderServicePort.orderDelivered(orderId, code));
+    }
+
 }

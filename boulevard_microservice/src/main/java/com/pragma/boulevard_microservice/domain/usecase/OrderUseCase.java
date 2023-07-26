@@ -135,4 +135,28 @@ public class OrderUseCase implements IOrderServicePort {
         return new CommonResponseModel("200","OK.", true);
     }
 
+    @Override
+    public CommonResponseModel orderDelivered(Long orderId, String code) {
+
+        OrderModel orderModel = iOrderPersistencePort.getOrder(orderId);
+
+        if (!orderModel.getStatusOrder().equals(Constants.ORDER_STATUS_READY)) {
+            throw new BadRequestException("The order cannot go to delivered, it is not in a ready state.");
+        }
+
+        UserModel clientUserModel = iUserPersistencePort.findUserById(orderModel.getIdClient()).getDto();
+
+        String status = iMessagingPersistencePort.validateCodeVerification(code, clientUserModel.getPhone())
+                .get(Constants.VERIFICATION_STATUS_KEY);
+
+        if (!status.equals(Constants.APPROVED_STATUS)) {
+            throw new BadRequestException("The code sent is invalid.");
+        }
+
+        orderModel.setStatusOrder(Constants.ORDER_STATUS_DELIVERED);
+        iOrderPersistencePort.saveOrder(orderModel);
+
+        return new CommonResponseModel("200","OK.", true);
+    }
+
 }

@@ -55,7 +55,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Map<String, String>> handleBadRequestException(
             BadRequestException ignoredBadRequestException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(MESSAGE,
                         ignoredBadRequestException.getMessage() != null ? ignoredBadRequestException.getMessage() : "Bad request."));
     }
@@ -90,6 +90,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE,
                         ignoredDishNotFoundException.getMessage() != null ? ignoredDishNotFoundException.getMessage() : "Dish not found."));
+    }
+
+    @ExceptionHandler(SendMessageException.class)
+    public ResponseEntity<Map<String, String>> handleSendMessageException(
+            SendMessageException ignoredSendMessageException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE,
+                        ignoredSendMessageException.getMessage() != null ? ignoredSendMessageException.getMessage() : "Verify the customer's phone number and security code."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

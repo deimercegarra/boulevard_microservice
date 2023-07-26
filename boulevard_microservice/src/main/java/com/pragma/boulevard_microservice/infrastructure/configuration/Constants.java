@@ -16,4 +16,10 @@ public class Constants {
     public static final String ORDER_STATUS_READY = "Ready";
     public static final String ORDER_STATUS_DELIVERED = "Delivered";
 
+    public static final String RESPONSE_MESSAGE_KEY = "message";
+    public static final String SMS_SENT_MESSAGE = "notification sent correctly";
+    public static final String SENT_CODE_STATUS_KEY = "sent_code_status";
+    public static final String VERIFICATION_STATUS_KEY = "verification_status";
+    public static final String APPROVED_STATUS = "approved";
+
 }

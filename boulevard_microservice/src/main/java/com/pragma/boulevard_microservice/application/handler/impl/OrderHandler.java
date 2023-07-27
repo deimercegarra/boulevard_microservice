@@ -77,4 +77,9 @@ public class OrderHandler implements IOrderHandler {
         return iCommonResponseMapper.toResponse(iOrderServicePort.orderDelivered(orderId, code));
     }
 
+    @Override
+    public CommonResponseDto orderCancelled(Long orderId) {
+        return iCommonResponseMapper.toResponse(iOrderServicePort.orderCancelled(orderId));
+    }
+
 }

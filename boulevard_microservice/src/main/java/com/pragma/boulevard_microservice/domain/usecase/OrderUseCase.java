@@ -132,7 +132,7 @@ public class OrderUseCase implements IOrderServicePort {
                 clientUserModel.getPhone()
         );
 
-        return new CommonResponseModel("200","OK.", true);
+        return new CommonResponseModel("200", "OK.", true);
     }
 
     @Override
@@ -156,7 +156,22 @@ public class OrderUseCase implements IOrderServicePort {
         orderModel.setStatusOrder(Constants.ORDER_STATUS_DELIVERED);
         iOrderPersistencePort.saveOrder(orderModel);
 
-        return new CommonResponseModel("200","OK.", true);
+        return new CommonResponseModel("200", "OK.", true);
+    }
+
+    @Override
+    public CommonResponseModel orderCancelled(Long orderId){
+
+        OrderModel orderModel = iOrderPersistencePort.getOrder(orderId);
+
+        if (!orderModel.getStatusOrder().equals(Constants.ORDER_STATUS_PENDING)) {
+            throw new BadRequestException("Sorry, your order is already being prepared and cannot be cancelled.");
+        }
+
+        orderModel.setStatusOrder(Constants.ORDER_STATUS_CANCELLED);
+        iOrderPersistencePort.saveOrder(orderModel);
+
+        return new CommonResponseModel("200", "OK.", true);
     }
 
 }

@@ -25,4 +25,6 @@ public interface IOrderHandler {
     CommonResponseDto orderReady(Long orderId);
 
     CommonResponseDto orderDelivered(Long orderId, String code);
+
+    CommonResponseDto orderCancelled(Long orderId);
 }

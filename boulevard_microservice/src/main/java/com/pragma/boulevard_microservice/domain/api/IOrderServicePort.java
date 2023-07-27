@@ -24,4 +24,6 @@ public interface IOrderServicePort {
     CommonResponseModel orderReady(Long orderId);
 
     CommonResponseModel orderDelivered(Long orderId, String code);
+
+    CommonResponseModel orderCancelled(Long orderId);
 }

@@ -265,4 +265,20 @@ class OrderUseCaseTest {
 
     }
 
+    @Test
+    void orderCancelledTest() {
+        when(iOrderPersistencePort.getOrder(5L)).thenReturn(DatosTest.ORDER_MODEL_005);
+        when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_005)).thenReturn(DatosTest.ORDER_MODEL_005);
+
+        assertNotNull(orderUseCase.orderCancelled(5L));
+    }
+
+    @Test
+    void orderCancelledBadRequestExceptionTest() {
+
+        when(iOrderPersistencePort.getOrder(2L)).thenReturn(DatosTest.ORDER_MODEL_002);
+        assertThrows(BadRequestException.class, () -> orderUseCase.orderCancelled(2L));
+
+    }
+
 }

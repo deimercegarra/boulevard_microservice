@@ -14,10 +14,4 @@ public interface IRestaurantHandler {
 
     public List<RestaurantPageableResponseDto> getAllRestaurants(Pageable pageable);
 
-    public RestaurantResponseDto getRestaurant(Long restaurantId);
-
-    public void updateRestaurant(RestaurantRequestDto restaurantRequestDto);
-
-    public void deleteRestaurant(Long restaurantId);
-
 }

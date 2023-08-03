@@ -12,10 +12,4 @@ public interface IRestaurantServicePort {
 
     List<RestaurantModel> getAllRestaurants(Pageable pageable);
 
-    RestaurantModel getRestaurant(Long restaurantId);
-
-    void updateRestaurant(RestaurantModel restaurantModel);
-
-    void deleteRestaurant(Long restaurantId);
-
 }

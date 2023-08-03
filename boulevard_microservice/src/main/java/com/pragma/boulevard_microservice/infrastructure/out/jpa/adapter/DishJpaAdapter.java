@@ -96,12 +96,6 @@ public class DishJpaAdapter implements IDishPersistencePort {
     @Override
     public List<DishModel> findDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable) {
 
-        RestaurantEntity restaurant = new RestaurantEntity();
-        restaurant.setId( idRestaurant );
-
-        CategoryEntity category = new CategoryEntity();
-        category.setId( idCategory );
-
         List<DishEntity> dishEntityList = iDishRepository.findByRestaurantEntityAndCategoryEntity( idRestaurant, idCategory, pageable );
 
         if (dishEntityList.isEmpty()) {

@@ -12,7 +12,11 @@ import com.pragma.boulevard_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +30,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class RestaurantUseCaseTest {
 
+    @Mock
     private IRestaurantPersistencePort iRestaurantPersistencePort;
-    private IRestaurantServicePort iRestaurantServicePort;
+
+    @Mock
     private IUserServicePort iUserServicePort;
+
+    @InjectMocks
     private RestaurantUseCase restaurantUseCase;
 
     private UserModel userModel;
@@ -39,13 +47,6 @@ class RestaurantUseCaseTest {
 
     @BeforeEach
     void setUp(){
-
-        iRestaurantPersistencePort = mock(IRestaurantPersistencePort.class);
-        iRestaurantServicePort = mock(IRestaurantServicePort.class);
-        iUserServicePort = mock(IUserServicePort.class);
-        restaurantUseCase = new RestaurantUseCase(iRestaurantPersistencePort, iUserServicePort);
-        MockitoAnnotations.initMocks(this);
-
         restaurantModel = new RestaurantModel();
 
         restaurantModel.setName("lanota");
@@ -60,7 +61,7 @@ class RestaurantUseCaseTest {
     void saveRestaurantTest() {
         CommonResponseModel commonResponseModel = new CommonResponseModel("201", "CREATED.", true);
         when(iUserServicePort.findRole(1L)).thenReturn(commonResponseModel);
-        when(iRestaurantPersistencePort.saveRestaurant(restaurantModel)).thenReturn(restaurantModel);
+        //when(iRestaurantPersistencePort.saveRestaurant(restaurantModel)).thenReturn(restaurantModel);
         assertNotNull(restaurantUseCase.saveRestaurant(restaurantModel));
     }
 
@@ -68,7 +69,7 @@ class RestaurantUseCaseTest {
     void saveRestaurantNotSuccessfulTest() {
         CommonResponseModel commonResponseModel = new CommonResponseModel("404", "User not found.", false);
         when(iUserServicePort.findRole(1L)).thenReturn(commonResponseModel);
-        when(iRestaurantPersistencePort.saveRestaurant(any(RestaurantModel.class))).thenReturn(restaurantModel);
+        //when(iRestaurantPersistencePort.saveRestaurant(any(RestaurantModel.class))).thenReturn(restaurantModel);
         assertNotNull(restaurantUseCase.saveRestaurant(restaurantModel));
     }
 
@@ -113,7 +114,7 @@ class RestaurantUseCaseTest {
         restaurantList.add(restaurantModel);
 
         when(iRestaurantPersistencePort.getAllRestaurants(pageable)).thenReturn(anyList());
-        assertNotNull(iRestaurantServicePort.getAllRestaurants(pageable));
+        assertNotNull(iRestaurantPersistencePort.getAllRestaurants(pageable));
         //assertFalse(iRestaurantServicePort.getAllRestaurants(pageable).isEmpty());
     }
 

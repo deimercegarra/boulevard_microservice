@@ -12,7 +12,11 @@ import com.pragma.boulevard_microservice.infrastructure.exception.DishNotFoundEx
 import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,22 +26,34 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class OrderUseCaseTest {
 
+    @Mock
     private IOrderPersistencePort iOrderPersistencePort;
+
+    @Mock
     private IOrderDishPersistencePort iOrderDishPersistencePort;
+
+    @Mock
     private IOrderServicePort iOrderServicePort;
+
+    @InjectMocks
     private OrderUseCase orderUseCase;
+
+    @Mock
     private IEmployeePersistencePort iEmployeePersistencePort;
 
+    @Mock
     private IUserPersistencePort iUserPersistencePort;
+
+    @Mock
     private IMessagingPersistencePort iMessagingPersistencePort;
 
     @BeforeEach
     void setUp(){
 
-        iOrderPersistencePort = mock(IOrderPersistencePort.class);
+        /*iOrderPersistencePort = mock(IOrderPersistencePort.class);
         iOrderDishPersistencePort = mock(IOrderDishPersistencePort.class);
         iEmployeePersistencePort = mock(IEmployeePersistencePort.class);
         iOrderServicePort = mock(IOrderServicePort.class);
@@ -46,7 +62,7 @@ class OrderUseCaseTest {
 
         orderUseCase = new OrderUseCase(iOrderPersistencePort, iOrderDishPersistencePort, iEmployeePersistencePort,
                 iUserPersistencePort, iMessagingPersistencePort);
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this);*/
 
     }
 
@@ -69,7 +85,7 @@ class OrderUseCaseTest {
 
         Long idClient = 1L;
 
-        when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
+        //when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
         when(iOrderPersistencePort.saveOrder(order)).thenReturn(order);
 
         assertNotNull(orderUseCase.saveOrder(order, dishList));
@@ -94,7 +110,7 @@ class OrderUseCaseTest {
 
         Long idClient = 1L;
 
-        when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
+        //when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
         when(iOrderPersistencePort.saveOrder(order)).thenReturn(order);
 
         doThrow(DishNotBelongRestaurantException.class).when(iOrderDishPersistencePort).saveOrderDish(orderDish, order.getRestaurantModel().getId());
@@ -119,7 +135,7 @@ class OrderUseCaseTest {
 
         Long idClient = 1L;
 
-        when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
+        //when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(Collections.emptyList());
         when(iOrderPersistencePort.saveOrder(order)).thenReturn(order);
 
         doThrow(DishNotFoundException.class).when(iOrderDishPersistencePort).saveOrderDish(orderDish, order.getRestaurantModel().getId());
@@ -151,7 +167,7 @@ class OrderUseCaseTest {
 
         when(iOrderPersistencePort.findOrderInProcessByClient(idClient)).thenReturn(orderList);
         //when(iOrderPersistencePort.saveOrder(order)).thenReturn(order);
-        when(iOrderServicePort.saveOrder(order, dishList)).thenThrow(DomainException.class);
+        //when(iOrderServicePort.saveOrder(order, dishList)).thenThrow(DomainException.class);
         assertThrows(DomainException.class, () -> orderUseCase.saveOrder(order, dishList));
     }
 
@@ -238,7 +254,7 @@ class OrderUseCaseTest {
         when(iOrderPersistencePort.getOrder(3L)).thenReturn(DatosTest.ORDER_MODEL_003);
         when(iUserPersistencePort.findUserById(DatosTest.ORDER_MODEL_003.getIdClient())).thenReturn(commonResponseModel);
         when(iMessagingPersistencePort.validateCodeVerification("595110", DatosTest.USER_MODEL_001.getPhone())).thenReturn(responseMap);
-        when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_004)).thenReturn(DatosTest.ORDER_MODEL_004);
+        //when(iOrderPersistencePort.saveOrder(DatosTest.ORDER_MODEL_004)).thenReturn(DatosTest.ORDER_MODEL_004);
 
         assertNotNull(orderUseCase.orderDelivered(3L, "595110"));
     }

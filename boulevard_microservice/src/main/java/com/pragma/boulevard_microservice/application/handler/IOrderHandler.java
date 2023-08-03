@@ -12,8 +12,6 @@ public interface IOrderHandler {
 
     public CommonResponseDto saveOrder(OrderRequestDto orderRequestDto);
 
-    public OrderResponseDto getOrder(Long orderId);
-
     public void updateOrder(OrderRequestDto orderRequestDto);
 
     public void deleteOrder(Long orderId);

@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class RestaurantHandler implements IRestaurantHandler {
 
     private final IRestaurantServicePort iRestaurantServicePort;
@@ -26,6 +25,7 @@ public class RestaurantHandler implements IRestaurantHandler {
     private final IRestaurantResponseMapper iRestaurantResponseMapper;
     private final ICommonResponseMapper iCommonResponseMapper;
 
+    @Transactional
     @Override
     public CommonResponseDto saveRestaurant(RestaurantRequestDto restaurantRequestDto) {
         return iCommonResponseMapper.toResponse(iRestaurantServicePort.saveRestaurant(iRestaurantRequestMapper.toRestaurantModel(restaurantRequestDto)));
@@ -36,18 +36,4 @@ public class RestaurantHandler implements IRestaurantHandler {
         return iRestaurantResponseMapper.toResponseListPageable( iRestaurantServicePort.getAllRestaurants(pageable) );
     }
 
-    @Override
-    public RestaurantResponseDto getRestaurant(Long restaurantId) {
-        return iRestaurantResponseMapper.toResponse(iRestaurantServicePort.getRestaurant(restaurantId));
-    }
-
-    @Override
-    public void updateRestaurant(RestaurantRequestDto restaurantRequestDto) {
-        iRestaurantServicePort.saveRestaurant(iRestaurantRequestMapper.toRestaurantModel(restaurantRequestDto));
-    }
-
-    @Override
-    public void deleteRestaurant(Long restaurantId) {
-        iRestaurantServicePort.deleteRestaurant(restaurantId);
-    }
 }

@@ -7,6 +7,12 @@ spring:
     username: root
     password: Pr@gm4
 
+#spring:
+#  datasource:
+#    url: jdbc:mysql://boulevard.cl7ufzpqpjod.us-east-2.rds.amazonaws.com:3306/boulevard
+#    username: admin
+#    password: Pragm4123
+
   jpa:
     hibernate:
       ddl-auto: update

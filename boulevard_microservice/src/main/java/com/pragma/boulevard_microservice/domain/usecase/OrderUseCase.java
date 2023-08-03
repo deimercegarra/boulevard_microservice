@@ -57,21 +57,6 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public OrderModel getOrder(Long orderId) {
-        return iOrderPersistencePort.getOrder(orderId);
-    }
-
-    @Override
-    public void updateOrder(OrderModel orderModel) {
-        iOrderPersistencePort.updateOrder(orderModel);
-    }
-
-    @Override
-    public void deleteOrder(Long orderId) {
-        iOrderPersistencePort.deleteOrder(orderId);
-    }
-
-    @Override
     public List<OrderModel> getOrderByStatus(String status, Long employeeId, Pageable pageable) {
 
         EmployeeModel employeeModel = iEmployeePersistencePort.findByIdEmployee( employeeId );

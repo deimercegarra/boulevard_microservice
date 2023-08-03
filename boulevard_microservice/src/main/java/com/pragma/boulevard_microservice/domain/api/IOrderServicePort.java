@@ -11,12 +11,6 @@ public interface IOrderServicePort {
 
     CommonResponseModel saveOrder(OrderModel orderModel, List<OrderDishModel> orderDishModelList);
 
-    OrderModel getOrder(Long orderId);
-
-    void updateOrder(OrderModel orderModel);
-
-    void deleteOrder(Long orderId);
-
     List<OrderModel> getOrderByStatus(String status, Long employeeId, Pageable pageable);
 
     List<OrderModel> assignToOrder(List<OrderModel> modelList, Long employeeId);

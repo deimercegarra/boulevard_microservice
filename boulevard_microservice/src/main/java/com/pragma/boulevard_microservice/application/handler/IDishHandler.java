@@ -17,10 +17,6 @@ public interface IDishHandler {
 
     public CommonResponseDto saveDish(DishRequestDto dishRequestDto);
 
-    public List<DishResponseDto> getAllDishes();
-
-    public DishResponseDto getDish(Long dishId);
-
     public CommonResponseDto updateDish(DishUpdateRequestDto dishUpdateRequestDto);
 
     public CommonResponseDto activeDish(ActiveDishRequestDto activeDishRequestDto);

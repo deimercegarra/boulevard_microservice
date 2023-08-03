@@ -12,14 +12,8 @@ public interface IDishServicePort {
 
     CommonResponseModel saveDish(DishModel dishModel);
 
-    List<DishModel> getAllDishes();
-
-    DishModel getDish(Long dishId);
-
     CommonResponseModel updateDish(DishModel dishModel);
 
     CommonResponseModel activeDish(DishModel dishModel);
-
-    void deleteDish(Long dishId);
 
 }

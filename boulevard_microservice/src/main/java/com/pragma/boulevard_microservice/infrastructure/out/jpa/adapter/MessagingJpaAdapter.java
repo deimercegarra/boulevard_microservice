@@ -6,13 +6,15 @@ import com.pragma.boulevard_microservice.domain.spi.IMessagingPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.exception.SendMessageException;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.client.usermicroservice.TwilioClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
 @RequiredArgsConstructor
 public class MessagingJpaAdapter implements IMessagingPersistencePort {
 
-    private final TwilioClient twilioClient;
+    //@Autowired
+    private TwilioClient twilioClient;
 
     @Override
     public void notifyOrderStatus(String message, String phone) {

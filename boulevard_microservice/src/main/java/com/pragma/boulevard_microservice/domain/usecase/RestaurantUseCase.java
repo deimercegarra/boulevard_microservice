@@ -31,7 +31,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         try {
             commonResponseModel = iUserServicePort.findRole(restaurantModel.getIdOwner());
         } catch (Exception ex) {
-            throw new DomainException(new CommonResponseDto("500","Internal error.", false).toString());
+            throw new DomainException(new CommonResponseModel("500","Internal error.", false).toString());
         }
 
         if (!commonResponseModel.getStatus()) {
@@ -52,18 +52,4 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return iRestaurantPersistencePort.getAllRestaurants(pageable);
     }
 
-    @Override
-    public RestaurantModel getRestaurant(Long restaurantId) {
-        return iRestaurantPersistencePort.getRestaurant(restaurantId);
-    }
-
-    @Override
-    public void updateRestaurant(RestaurantModel restaurantModel) {
-        iRestaurantPersistencePort.updateRestaurant(restaurantModel);
-    }
-
-    @Override
-    public void deleteRestaurant(Long restaurantId) {
-        iRestaurantPersistencePort.deleteRestaurant(restaurantId);
-    }
 }

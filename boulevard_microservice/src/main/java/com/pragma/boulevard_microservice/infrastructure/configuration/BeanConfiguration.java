@@ -32,20 +32,17 @@ public class BeanConfiguration {
     private final IRestaurantRepository iRestaurantRepository;
     private final IRestaurantEntityMapper iRestaurantEntityMapper;
 
-    private final UserClient userClient;
+    //private final UserClient userClient;
     private final ICommonResponseMapper iCommonResponseMapper;
     private final IEmployeeRepository iEmployeeRepository;
     private final IEmployeeEntityMapper iEmployeeEntityMapper;
-    private final TwilioClient twilioClient;
+    //private final TwilioClient twilioClient;
 
     @Bean
     public ICategoryPersistencePort iCategoryPersistencePort() {
         return new CategoryJpaAdapter(iCategoryRepository, iCategoryEntityMapper);
     }
-    @Bean
-    public ICategoryServicePort categoryServicePort() {
-        return new CategoryUseCase(iCategoryPersistencePort());
-    }
+
 
     @Bean
     public IDishPersistencePort iDishPersistencePort() {
@@ -67,7 +64,7 @@ public class BeanConfiguration {
 
     @Bean
     public IMessagingPersistencePort iMessagingPersistencePort(){
-        return new MessagingJpaAdapter(twilioClient);
+        return new MessagingJpaAdapter();
     }
 
     @Bean
@@ -78,10 +75,6 @@ public class BeanConfiguration {
     @Bean
     public IOrderDishPersistencePort iOrderDishPersistencePort() {
         return new OrderDishJpaAdapter(iOrderDishRepository, iDishRepository, iOrderDishEntityMapper);
-    }
-    @Bean
-    public IOrderDishServicePort orderDishServicePort() {
-        return new OrderDishUseCase(iOrderDishPersistencePort());
     }
 
     @Bean
@@ -96,7 +89,7 @@ public class BeanConfiguration {
 
     @Bean
     public IUserPersistencePort iUserPersistencePort() {
-        return new UserJpaAdapter(userClient, iCommonResponseMapper);
+        return new UserJpaAdapter(iCommonResponseMapper);
     }
     @Bean
     public IRestaurantServicePort restaurantServicePort() {

@@ -12,6 +12,8 @@ import com.pragma.boulevard_microservice.infrastructure.exception.NoDataFoundExc
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,14 +29,22 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class DishUseCaseTest {
 
+    @Mock
     private IDishPersistencePort iDishPersistencePort;
+
+    @Mock
     private IDishServicePort iDishServicePort;
+
+    @InjectMocks
     private DishUseCase dishUseCase;
 
+    @Mock
     private IRestaurantPersistencePort iRestaurantPersistencePort;
+
+    @Mock
     private IUserPersistencePort iUserPersistencePort;
 
     private DishModel dishModel;
@@ -45,12 +55,12 @@ class DishUseCaseTest {
     @BeforeEach
     void setUp(){
 
-        iDishPersistencePort = mock(IDishPersistencePort.class);
+        /*iDishPersistencePort = mock(IDishPersistencePort.class);
         iRestaurantPersistencePort = mock(IRestaurantPersistencePort.class);
         iUserPersistencePort = mock(IUserPersistencePort.class);
         iDishServicePort = mock(IDishServicePort.class);
         dishUseCase = new DishUseCase(iDishPersistencePort, iRestaurantPersistencePort, iUserPersistencePort);
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this);*/
 
         dishModel = new DishModel();
 
@@ -203,7 +213,7 @@ class DishUseCaseTest {
         List<DishModel> dishModelList =  new ArrayList<>();
         dishModelList.add(dishModel);
 
-        when(iDishPersistencePort.findDishesByRestaurantAndCategory(idRestaurant, idCategory, pageable)).thenReturn(dishModelList);
+        //when(iDishPersistencePort.findDishesByRestaurantAndCategory(idRestaurant, idCategory, pageable)).thenReturn(dishModelList);
         assertNotNull(iDishServicePort.getDishesByRestaurantAndCategory(idRestaurant, idCategory, pageable));
     }
 

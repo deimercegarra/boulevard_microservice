@@ -21,7 +21,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class DishHandler implements IDishHandler {
 
     private final IDishServicePort iDishServicePort;
@@ -29,34 +28,28 @@ public class DishHandler implements IDishHandler {
     private final IDishResponseMapper iDishResponseMapper;
     private final ICommonResponseMapper iCommonResponseMapper;
 
+    @Transactional
     @Override
     public CommonResponseDto saveDish(DishRequestDto dishRequestDto) {
         return iCommonResponseMapper.toResponse(iDishServicePort.saveDish(iDishRequestMapper.toDishModel(dishRequestDto)));
     }
 
-    @Override
-    public List<DishResponseDto> getAllDishes() {
-        return iDishResponseMapper.toResponseList(iDishServicePort.getAllDishes());
-    }
-
-    @Override
-    public DishResponseDto getDish(Long dishId) {
-        return iDishResponseMapper.toResponse(iDishServicePort.getDish(dishId));
-    }
-
+    @Transactional
     @Override
     public CommonResponseDto updateDish(DishUpdateRequestDto dishUpdateRequestDto) {
         return iCommonResponseMapper.toResponse(iDishServicePort.updateDish(iDishRequestMapper.toDishModel(dishUpdateRequestDto)));
     }
 
+    @Transactional
     @Override
     public CommonResponseDto activeDish(ActiveDishRequestDto activeDishRequestDto) {
         return iCommonResponseMapper.toResponse(iDishServicePort.activeDish(iDishRequestMapper.toDishModel(activeDishRequestDto)));
     }
 
+    @Transactional
     @Override
     public void deleteDish(Long dishId) {
-        iDishServicePort.deleteDish(dishId);
+        //iDishServicePort.deleteDish(dishId);
     }
 
     @Override

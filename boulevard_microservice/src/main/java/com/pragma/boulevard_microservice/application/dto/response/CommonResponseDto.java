@@ -1,5 +1,6 @@
 package com.pragma.boulevard_microservice.application.dto.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

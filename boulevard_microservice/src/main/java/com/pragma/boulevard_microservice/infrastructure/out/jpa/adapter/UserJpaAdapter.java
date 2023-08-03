@@ -6,11 +6,13 @@ import com.pragma.boulevard_microservice.domain.model.UserModel;
 import com.pragma.boulevard_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.boulevard_microservice.infrastructure.out.jpa.client.usermicroservice.UserClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RequiredArgsConstructor
 public class UserJpaAdapter implements IUserPersistencePort {
 
-    private final UserClient userClient;
+    //@Autowired
+    private UserClient userClient;
     private final ICommonResponseMapper iCommonResponseMapper;
 
     @Override

@@ -7,8 +7,7 @@
 trigger:
   - feature/hu-17/traceability
 
-pool:
-  vmImage: ubuntu-latest
+pool: myselfhostedagent
 
 steps:
   - task: Gradle@3

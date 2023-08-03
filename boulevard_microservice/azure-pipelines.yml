@@ -13,7 +13,7 @@ steps:
   - task: Gradle@3
     displayName: 'Building gradle project'
     inputs:
-      gradleWrapperFile: '**/gradlew'
+      gradleWrapperFile: 'boulevard_microservice/gradlew'
       tasks: 'clean build'
       jdkVersionOption: '1.17'
 
